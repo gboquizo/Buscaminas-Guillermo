@@ -1,0 +1,141 @@
+$primary-color: #3F51B5
+$dark-primary-color: #303F9F
+$accent-color: #FF5722
+$light-primary-color: #C5CAE9
+$primary-text-color: #212121
+$secondary-text-color: #757575
+$divider-color: #BDBDBD
+$white-color: #fff
+$error-color: #EF4343
+$succes-color: #29E571
+
+=flex-center($direction)
+    display: flex
+    flex-direction: $direction
+    justify-content: center
+    align-items: center
+
+=tile-size($width, $height,$fontsize)
+    width: $width
+    height: $height
+    font-size: $fontsize
+    border: 1px solid $white-color
+    +flex-center(column)
+    margin: 0px
+    outline: none
+    cursor: pointer
+    text-align: center   
+
+.easy-tile
+    +tile-size(52px,52px,1.2rem)
+
+.medium-tile
+    +tile-size(35px,35px,1rem)
+
+.hard-tile
+    +tile-size(30px,30px,0.8rem)
+
+.cover-tile
+    background-color: $primary-color
+
+.uncover-tile
+    background-color: $white-color
+    border: 1px solid $primary-color
+    color: $primary-color
+
+.cover-flag
+    background-color: #FF5722
+
+.color1
+    background-color: #F98933
+
+.color2
+    background-color: #F96546
+
+.color3
+    background-color: #B56788
+
+.color4
+    background-color: #A10678
+
+.color5
+    background-color: #E54324
+
+.color6
+    background-color: #A32130
+
+.color7
+    background-color: #B00187
+
+.color8
+    background-color: #EEEAAA
+
+.color9
+    background-color: #AAAFFF
+
+.color10
+    background-color: #AFACCC
+
+.uncover-win
+    background: $succes-color url("../images/mina.png") no-repeat center
+
+#btnPlayAgain
+    min-height: 25px
+    min-width: 70px
+    border-width: 0px
+    padding: 15px
+    background: $dark-primary-color
+    color: $white-color
+    font-weight: bold
+    border-radius: 5px
+    font-size: 1.3rem
+    margin-top: 20px
+    margin-bottom: 20px
+
+.shadowMaterialButton
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)
+    -ms-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)
+    -o-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)
+.shadowMaterial
+    -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)
+    -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)
+    -ms-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)
+    -o-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)
+
+body
+    margin: 0px
+    padding: 0px
+    font-family: 'Lato', sans-serif
+    -webkit-user-select: none
+    -moz-user-select: none
+    -ms-user-select: none
+    user-select: none
+    main
+        +flex-center(column)
+        min-height: 100vh
+        width: 100%
+        section
+            +flex-center(column)
+            article
+                +flex-center(row)
+                text-align: center
+                background-color: $primary-color
+            select
+                height: 35px
+                font-size: 1.3rem
+                background-color: $primary-color
+                border-radius: 5px
+                border-width: 0px
+                outline: none
+                color: $white-color
+                text-align-last: center
+                -moz-appearance: none
+                -webkit-appearance: none
+                appearance: none
+                font-weight: bold
+                margin: 10px
+            #board
+                width: auto
