@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="author" content="Guillermo Boquizo Sánchez">
+    <meta name="description" content="Juego de Buscaminas con jQuery">
+    <meta name="keywords" content="HTML,CSS,JavaScript">
+    <title>Buscaminas con jQuery</title>
+    <link rel="stylesheet" href="css/estilos.min.css">
+    <link rel="stylesheet" href="css/sweetalert2.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script src="js/sweetalert2.all.min.js"></script>
+    <script type="module" src="js/main.js" charset="UTF-8"></script>
+    <script type="module" src="js/gui.js" charset="UTF-8"></script>
+</head>
+
+<body>
+    <noscript>
+        <p>Por favor, compruebe que su navegador sea compatible con javascript,
+            o bien compruebe si lo tiene activado.</p>
+    </noscript>
+</body>
+
+<main>
+    <h1>Buscaminas con jQuery - Guillermo Boquizo Sánchez</h1>
+
+    <section id="containerMenu">
+        <!--<img src="" id="instructions" alt="instrucciones de juego" /> -->
+    </section>
+    
+
+    <section>
+        <article id="containerLevelSelector">
+            <select name="nivel" id="seleccionNivel">
+                <option value="Selecciona el nivel">Selecciona el nivel</option>
+                <option value="fácil">Fácil</option>
+                <option value="difícil">Intermedio</option>
+                <option value="experto">Experto</option>
+            </select>
+            <article id="clock"></article>
+        </article>
+        <article id="board"></article>
+    </section>
+    <section id="playAgain"><span id="span"></span>
+    </section>
+</main>
+
+</html>
