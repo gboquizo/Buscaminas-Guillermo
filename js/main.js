@@ -188,17 +188,13 @@ export let buscaminas = {
      */
     picar(i, j) {
 
-        if (buscaminas.flagPerder || buscaminas.flagGanar || buscaminas.tableroPulsadas[i][j] === '🞫') {
+        if (buscaminas.flagPerder || buscaminas.flagGanar || buscaminas.tableroPulsadas[i][j] === '🞫' || buscaminas.tableroVisible[i][j] === "🏴") {
             return;
         }
 
         if (buscaminas.tableroLogica[i][j] === '💣') {
             buscaminas.flagPerder = true;
             throw new Error('Pulsaste una mina, has perdido');
-        }
-
-        if (buscaminas.tableroVisible[i][j] === "🏴") {
-            buscaminas.tableroVisible[i][j] = buscaminas.tableroLogica[i][j];
         }
 
         buscaminas.abrirCeros(i, j);
@@ -249,7 +245,7 @@ export let buscaminas = {
     actualizaCambios() {
         for (let i = 0; i < buscaminas.filas; i++) {
             for (let j = 0; j < buscaminas.columnas; j++) {
-                if (buscaminas.tableroPulsadas[i][j] === '🞫' && buscaminas.tableroVisible[i][j] === "■") {
+                if (buscaminas.tableroPulsadas[i][j] === '🞫' && (buscaminas.tableroVisible[i][j] === "■" || buscaminas.tableroVisible[i][j] === "🏴")) {
                     buscaminas.tableroVisible[i][j] = buscaminas.tableroLogica[i][j];
                 }
             }
