@@ -1,7 +1,7 @@
 .easy-tile {
-  width: 52px;
-  height: 52px;
-  font-size: 1.2rem;
+  width: 48px;
+  height: 48px;
+  font-size: 1.5rem;
   border: 1px solid #fff;
   display: flex;
   flex-direction: column;
@@ -14,9 +14,9 @@
 }
 
 .medium-tile {
-  width: 35px;
-  height: 35px;
-  font-size: 1rem;
+  width: 32px;
+  height: 32px;
+  font-size: 1.2rem;
   border: 1px solid #fff;
   display: flex;
   flex-direction: column;
@@ -29,9 +29,9 @@
 }
 
 .hard-tile {
-  width: 30px;
-  height: 30px;
-  font-size: 0.8rem;
+  width: 32px;
+  height: 32px;
+  font-size: 1.2rem;
   border: 1px solid #fff;
   display: flex;
   flex-direction: column;
@@ -44,61 +44,75 @@
 }
 
 .cover-tile {
-  background-color: #3F51B5;
+  background: #3F51B5 url("../images/bloque.svg") no-repeat;
+  background-size: contain;
 }
 
 .uncover-tile {
-  background-color: #fff;
-  border: 1px solid #3F51B5;
+  background: #fff url("../images/sinbloque.svg") no-repeat;
+  border: 1px solid #BDBDBD;
   color: #3F51B5;
 }
 
 .cover-flag {
-  background-color: #FF5722;
+  background: #FF5722 url("../images/bandera.svg") no-repeat center;
 }
 
 .color1 {
-  background-color: #F98933;
+  background: #F98933 url("../images/mina.svg") no-repeat center;
 }
 
 .color2 {
-  background-color: #F96546;
+  background: #F96546 url("../images/mina.svg") no-repeat center;
 }
 
 .color3 {
-  background-color: #B56788;
+  background: #B56788 url("../images/mina.svg") no-repeat center;
 }
 
 .color4 {
-  background-color: #A10678;
+  background: #A10678 url("../images/mina.svg") no-repeat center;
 }
 
 .color5 {
-  background-color: #E54324;
+  background: #E54324 url("../images/mina.svg") no-repeat center;
 }
 
 .color6 {
-  background-color: #A32130;
+  background: #A32130 url("../images/mina.svg") no-repeat center;
 }
 
 .color7 {
-  background-color: #B00187;
+  background: #B00187 url("../images/mina.svg") no-repeat center;
 }
 
 .color8 {
-  background-color: #EEEAAA;
+  background: #EEEAAA url("../images/mina.svg") no-repeat center;
 }
 
 .color9 {
-  background-color: #AAAFFF;
+  background: #AAAFFF url("../images/mina.svg") no-repeat center;
 }
 
 .color10 {
-  background-color: #AFACCC;
+  background: #AFACCC url("../images/mina.svg") no-repeat center;
 }
 
 .uncover-win {
-  background: #29E571 url("../images/mina.png") no-repeat center;
+  background: #29E571 url("../images/estrella.svg") no-repeat center;
+}
+
+#containerMenu {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#containerMenu img {
+  height: 60px;
+  margin-bottom: 20px;
+  margin-right: 20px;
 }
 
 #btnPlayAgain {
@@ -184,4 +198,36 @@ body main section select {
 
 body main section #board {
   width: auto;
+}
+
+body footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: #3F51B5;
+}
+
+body footer div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #3F51B5;
+  height: 35px;
+}
+
+body footer div a {
+  font-size: 1rem;
+  border-radius: 5px;
+  border-width: 0px;
+  outline: none;
+  color: #fff;
+  text-align-last: center;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  font-weight: bold;
+  margin: 10px;
 }

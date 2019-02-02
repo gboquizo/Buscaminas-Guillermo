@@ -8,6 +8,17 @@ $divider-color: #BDBDBD
 $white-color: #fff
 $error-color: #EF4343
 $succes-color: #29E571
+$color-flag: #FF5722
+$color1: #F98933
+$color2: #F96546
+$color3: #B56788
+$color4: #A10678
+$color5: #E54324
+$color6: #A32130
+$color7: #B00187
+$color8: #EEEAAA
+$color9: #AAAFFF
+$color10: #AFACCC
 
 =flex-center($direction)
     display: flex
@@ -27,57 +38,66 @@ $succes-color: #29E571
     text-align: center   
 
 .easy-tile
-    +tile-size(52px,52px,1.2rem)
+    +tile-size(48px,48px,1.5rem)
 
 .medium-tile
-    +tile-size(35px,35px,1rem)
+    +tile-size(32px,32px,1.2rem)
 
 .hard-tile
-    +tile-size(30px,30px,0.8rem)
+    +tile-size(32px,32px,1.2rem)
 
 .cover-tile
-    background-color: $primary-color
+    background: $primary-color url("../images/bloque.svg") no-repeat
+    background-size: contain
 
 .uncover-tile
-    background-color: $white-color
-    border: 1px solid $primary-color
+    background: $white-color url("../images/sinbloque.svg") no-repeat
+    border: 1px solid $divider-color
     color: $primary-color
 
 .cover-flag
-    background-color: #FF5722
+    background: $color-flag url("../images/bandera.svg") no-repeat center 
 
 .color1
-    background-color: #F98933
+    background: $color1 url("../images/mina.svg") no-repeat center
 
 .color2
-    background-color: #F96546
+    background: $color2 url("../images/mina.svg") no-repeat center
 
 .color3
-    background-color: #B56788
+    background: $color3 url("../images/mina.svg") no-repeat center
 
 .color4
-    background-color: #A10678
+    background: $color4 url("../images/mina.svg") no-repeat center
 
 .color5
-    background-color: #E54324
+    background: $color5 url("../images/mina.svg") no-repeat center
 
 .color6
-    background-color: #A32130
+    background: $color6 url("../images/mina.svg") no-repeat center
 
 .color7
-    background-color: #B00187
+    background: $color7 url("../images/mina.svg") no-repeat center
 
 .color8
-    background-color: #EEEAAA
+    background: $color8 url("../images/mina.svg") no-repeat center
 
 .color9
-    background-color: #AAAFFF
+    background: $color9 url("../images/mina.svg") no-repeat center
 
 .color10
-    background-color: #AFACCC
+    background: $color10 url("../images/mina.svg") no-repeat center
 
 .uncover-win
-    background: $succes-color url("../images/mina.png") no-repeat center
+    background: $succes-color url("../images/estrella.svg") no-repeat center
+
+
+#containerMenu
+    +flex-center(row)
+    img
+        height: 60px
+        margin-bottom: 20px
+        margin-right: 20px
 
 #btnPlayAgain
     min-height: 25px
@@ -139,3 +159,24 @@ body
                 margin: 10px
             #board
                 width: auto
+    footer
+        +flex-center(row)
+        background-color: $primary-color
+        div
+            +flex-center(row)
+            text-align: center
+            background-color: $primary-color
+            height: 35px
+            a
+                font-size: 1rem
+                border-radius: 5px
+                border-width: 0px
+                outline: none
+                color: $white-color
+                text-align-last: center
+                -moz-appearance: none
+                -webkit-appearance: none
+                appearance: none
+                font-weight: bold
+                margin: 10px
+            
