@@ -19,6 +19,7 @@ $color7: #B00187
 $color8: #EEEAAA
 $color9: #AAAFFF
 $color10: #AFACCC
+$hover: #F4CD1E
 
 =flex-center($direction)
     display: flex
@@ -35,7 +36,8 @@ $color10: #AFACCC
     margin: 0px
     outline: none
     cursor: pointer
-    text-align: center   
+    text-align: center
+    caret-color: transparent   
 
 .easy-tile
     +tile-size(48px,48px,1.5rem)
@@ -50,13 +52,25 @@ $color10: #AFACCC
     background: $primary-color url("../images/bloque.svg") no-repeat
     background-size: contain
 
+.cover-tile
+    &:hover
+        background: $hover url("../images/bloque-hover.svg") no-repeat
+
 .uncover-tile
     background: $white-color url("../images/sinbloque.svg") no-repeat
     border: 1px solid $divider-color
     color: $primary-color
 
+.uncover-tile
+    &:hover
+        background: $hover  
+
 .cover-flag
-    background: $color-flag url("../images/bandera.svg") no-repeat center 
+    background: $color-flag url("../images/bandera.svg") no-repeat center
+
+.cover-flag
+    &:hover
+        background: $hover url("../images/bandera-hover.svg") no-repeat
 
 .color1
     background: $color1 url("../images/mina.svg") no-repeat center
@@ -159,6 +173,9 @@ body
                 margin: 10px
             #board
                 width: auto
+                height: auto
+                border: 0px
+                position: relative    
     footer
         +flex-center(row)
         background-color: $primary-color
