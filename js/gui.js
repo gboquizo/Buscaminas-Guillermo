@@ -129,7 +129,9 @@ let buscaminasGUI = {
                 buscaminasGUI.playAudio('flag.mp3');
                 buscaminasGUI.levelStyles('cover-flag', element);
             } else if (buscaminas.tableroPulsadas[coordenada.fila][coordenada.columna] !== '🞫') {
-                buscaminasGUI.playAudio('unflag.mp3');
+                if (buscaminas.banderas >= 1) {
+                    buscaminasGUI.playAudio('unflag.mp3');
+                }
                 buscaminasGUI.levelStyles('cover-tile', element);
             }
             buscaminasGUI.updateFlags();
