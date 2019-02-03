@@ -102,6 +102,9 @@ let buscaminasGUI = {
             if (!buscaminas.flagGanar && !buscaminas.flagPerder) {
                 buscaminasGUI.updateGUI();
             }
+            if ($("#ptotalFlags")) {
+                $("#ptotalFlags").text(`${buscaminas.banderas}`)
+            }
         } catch (e) {
             buscaminasGUI.uncoverMines();
             if (e.message === '¡¡¡ Enhorabuena, has ganado !!!') {
@@ -128,6 +131,9 @@ let buscaminasGUI = {
                 buscaminasGUI.levelStyles('cover-flag', element);
             } else if (buscaminas.tableroPulsadas[coordenada.fila][coordenada.columna] !== '🞫') {
                 buscaminasGUI.levelStyles('cover-tile', element);
+            }
+            if ($("#ptotalFlags")) {
+                $("#ptotalFlags").text(`${buscaminas.banderas}`)
             }
         } catch (e) {
             if (e.message === "'¡¡¡ Enhorabuena, has ganado !!!'") {
@@ -258,6 +264,7 @@ let buscaminasGUI = {
      * Descubre las minas
      */
     uncoverMines() {
+        buscaminas.eliminarBanderas();
         let colors = [
             'color1',
             'color2',

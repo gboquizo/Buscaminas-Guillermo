@@ -20,12 +20,14 @@ export let buscaminas = {
     flagGanar: false,
     guardarAperturaCasillas: new Set(),
     guardarAperturaMinas: new Set(),
+    guardarCoordenadasBanderas: new Set(),
 
     /**
      * Realiza la carga inicial de la funcionalidad del buscaminas.
      */
     init() {
         buscaminas.flagPerder = false;
+        buscaminas.flagGanar = false;
         buscaminas.seleccionarNivel();
         buscaminas.instrucciones();
         buscaminas.generarTableros();
@@ -221,6 +223,9 @@ export let buscaminas = {
             if (buscaminas.tableroLogica[x][y] === 0) {
                 for (let j = Math.max(x - 1, 0); j <= Math.min(x + 1, buscaminas.filas - 1); j++) {
                     for (let k = Math.max(y - 1, 0); k <= Math.min(y + 1, buscaminas.columnas - 1); k++) {
+                        if (buscaminas.tableroVisible[x][y] === "🏴" && buscaminas.banderas < buscaminas.minas) {
+                            buscaminas.banderas++;
+                        }
                         buscaminas.cargarPulsacion(j, k);
                         buscaminas.abrirCeros(j, k);
                     }
@@ -260,9 +265,9 @@ export let buscaminas = {
      */
     marcar(x, y) {
         if (buscaminas.tableroPulsadas[x][y] !== '🞫' && buscaminas.tableroVisible[x][y] !== '🏴' && !buscaminas.flagGanar && !buscaminas.flagPerder) {
-            if (buscaminas.obtenerBanderasDelTablero() < buscaminas.minas) {
+            if (buscaminas.banderas > 0) {
                 buscaminas.tableroVisible[x][y] = "🏴";
-                buscaminas.banderas = buscaminas.banderas - buscaminas.obtenerBanderasDelTablero();
+                buscaminas.banderas--;
                 console.clear();
                 console.log('Tablero de lógica:\n');
                 console.table(buscaminas.tableroLogica);
@@ -270,10 +275,12 @@ export let buscaminas = {
                 console.table(buscaminas.tableroVisible);
                 console.log('Tablero pulsadas:\n');
                 console.table(buscaminas.tableroPulsadas);
+                console.log(buscaminas.banderas);
             }
         } else if (buscaminas.tableroPulsadas[x][y] !== '🞫' && buscaminas.tableroVisible[x][y] === '🏴') {
             buscaminas.tableroVisible[x][y] = '■';
             buscaminas.banderas++;
+
             console.clear();
             console.log('Tablero de lógica:\n');
             console.table(buscaminas.tableroLogica);
@@ -281,6 +288,9 @@ export let buscaminas = {
             console.table(buscaminas.tableroVisible);
             console.log('Tablero pulsadas:\n');
             console.table(buscaminas.tableroPulsadas);
+            console.log(buscaminas.banderas);
+
+
         }
         buscaminas.comprobarGanadorConBanderas();
 
@@ -369,57 +379,57 @@ export let buscaminas = {
      * @param y coordenada de la columna
      */
     obtenerBanderasAlrededor(x, y) {
-        let banderas = 0;
+        let totalBanderas = 0;
         if (buscaminas.tableroPulsadas[x][y] === '🞫') {
             if (x > 0 && y > 0) {
                 if (buscaminas.tableroVisible[x - 1][y - 1] === '🏴') {
-                    banderas++;
+                    totalBanderas++;
                 }
             }
 
             if (y > 0) {
                 if (buscaminas.tableroVisible[x][y - 1] === '🏴') {
-                    banderas++;
+                    totalBanderas++;
                 }
             }
 
             if (y > 0 && x < buscaminas.filas - 1) {
                 if (buscaminas.tableroVisible[x + 1][y + 1] === '🏴') {
-                    banderas++;
+                    totalBanderas++;
                 }
             }
 
             if (x > 0) {
                 if (buscaminas.tableroVisible[x - 1][y] === '🏴') {
-                    banderas++;
+                    totalBanderas++;
                 }
             }
 
             if (x < buscaminas.filas - 1) {
                 if (buscaminas.tableroVisible[x + 1][y] === '🏴') {
-                    banderas++;
+                    totalBanderas++;
                 }
             }
 
             if (y < buscaminas.columnas - 1) {
                 if (buscaminas.tableroVisible[x][y + 1] === '🏴') {
-                    banderas++;
+                    totalBanderas++;
                 }
             }
 
             if (x < buscaminas.filas - 1 && y < buscaminas.columnas - 1) {
                 if (buscaminas.tableroVisible[x + 1][y + 1] === '🏴') {
-                    banderas++;
+                    totalBanderas++;
                 }
             }
 
             if (x > 0 && buscaminas.columnas - 1) {
                 if (buscaminas.tableroVisible[x - 1][y + 1] === '🏴') {
-                    banderas++;
+                    totalBanderas++;
                 }
             }
         }
-        return banderas;
+        return totalBanderas;
     },
 
     /**
@@ -428,6 +438,7 @@ export let buscaminas = {
     comprobarGanador() {
         if (buscaminas.obtenerPulsadas() === buscaminas.obtenerPendientesParaGanar()) {
             buscaminas.flagGanar = true;
+            buscaminas.eliminarBanderas();
             throw new Error('¡¡¡ Enhorabuena, has ganado !!!');
         }
     },
@@ -502,6 +513,15 @@ export let buscaminas = {
         }
         if (casillasYaPulsadas > 1 && casillasParaGanar === buscaminas.minas) {
             throw new Error('Has ganado la partida');
+        }
+    },
+    eliminarBanderas() {
+        for (let i = 0; i < buscaminas.filas; i++) {
+            for (let j = 0; j < buscaminas.columnas; j++) {
+                if (buscaminas.tableroVisible[i][j] === "🏴") {
+                    buscaminas.guardarCoordenadasBanderas.add(i + "-" + j);
+                }
+            }
         }
     },
 };
