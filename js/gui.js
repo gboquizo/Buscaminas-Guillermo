@@ -112,6 +112,7 @@ let buscaminasGUI = {
                     buscaminasGUI.swalPlayAgain(e.message, "success");
                 }, 3000);
             } else {
+                buscaminasGUI.playAudio("explosion.mp3");
                 buscaminasGUI.openMinesByLevelAnimationTime(e.message);
             }
         }
@@ -126,6 +127,7 @@ let buscaminasGUI = {
         try {
             buscaminas.marcar(coordenada.fila, coordenada.columna);
             if (buscaminas.tableroVisible[coordenada.fila][coordenada.columna] === '🏴') {
+                buscaminasGUI.playAudio("flag.mp3");
                 buscaminasGUI.levelStyles('cover-flag', element);
             } else if (buscaminas.tableroPulsadas[coordenada.fila][coordenada.columna] !== '🞫') {
                 buscaminasGUI.levelStyles('cover-tile', element);
@@ -139,6 +141,7 @@ let buscaminasGUI = {
                     buscaminasGUI.swalPlayAgain(e.message, "success");
                 }, 3000);
             } else {
+                buscaminasGUI.playAudio("explosion.mp3");
                 buscaminasGUI.openMinesByLevelAnimationTime(e.message);
             }
         }
@@ -163,6 +166,7 @@ let buscaminasGUI = {
                     buscaminasGUI.swalPlayAgain(e.message, "success");
                 }, 3000);
             } else {
+                buscaminasGUI.playAudio("explosion.mp3");
                 buscaminasGUI.openMinesByLevelAnimationTime(e.message);
             }
         }
@@ -202,6 +206,7 @@ let buscaminasGUI = {
                 }
                 buscaminasGUI.levelStyles('uncover-tile', $element);
             }
+            buscaminasGUI.playAudio("abrir.mp3");
         }
         buscaminas.guardarAperturaCasillas.clear();
     },
@@ -367,10 +372,10 @@ let buscaminasGUI = {
         }
     },
 
-     /**
+    /**
      * Comprueba y actualiza el número de banderas a mostrar.
      */
-    updateFlags(){
+    updateFlags() {
         if ($("#ptotalFlags")) {
             $("#ptotalFlags").text(`${buscaminas.banderas}`)
         }
@@ -417,12 +422,15 @@ let buscaminasGUI = {
             gameTime = 0;
         }
         if (type === "success") {
+            buscaminasGUI.playAudio("win.mp3");
             if (levelRecord === gameTime || levelRecord > gameTime || levelRecord === null) {
                 title = `${msg} \n Además has establecido el récord de este nivel en ${gameTime} segundo/s. \n\n`;
             }
         }
+        if (type === "error") {
+            buscaminasGUI.playAudio("lost.mp3");
+        }
         message = `Tu tiempo en esta partida ha sido de ${gameTime} segundo/s. \n \n El récord actual es de ${levelRecord} segundo/s.\n \n`;
-        //buscaminasGUI.playAudio("lost.mp3");
         Swal.fire({
             title: title,
             text: message + "¿Deseas jugar de nuevo?",
@@ -502,6 +510,16 @@ let buscaminasGUI = {
             });
         }
     },
+
+    /**
+     * Permite reproducir audio.
+     */
+    playAudio(file) {
+        let $play = new Audio();
+        $play.src = "./sounds/" + file;
+        $play.play();
+    }
+
 };
 
 $(init);
