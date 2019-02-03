@@ -16,20 +16,19 @@ let $time;
  * Carga la interfaz de juego.
  */
 let init = function () {
-    $("#seleccionNivel")[0].selectedIndex = 0;
+    $('#seleccionNivel')[0].selectedIndex = 0;
     $('#seleccionNivel').change(buscaminasGUI.start);
-    $containerLevelSelector = $("#containerLevelSelector");
-    $clock = $("#clock");
+    $containerLevelSelector = $('#containerLevelSelector');
+    $clock = $('#clock');
     $board = $('#board');
-    $time = $("time");
-    $containerLevelSelector.addClass("shadowMaterialButton");
+    $time = $('time');
+    $containerLevelSelector.addClass('shadowMaterialButton');
 };
 
 /**
  * Objeto buscaminasGUI.
  */
 let buscaminasGUI = {
-
     /**
      * Carga el juego.
      */
@@ -52,10 +51,10 @@ let buscaminasGUI = {
      * Establece una serie de propiedades css al iniciar.
      */
     preloadCSS() {
-        $containerLevelSelector.css("width", "100%");
-        $containerLevelSelector.css("border-bottom", "2px solid #BDBDBD");
-        $("#clock").css("min-width", "100px");
-        $board.addClass("shadowMaterial").css("min-width", "100%");
+        $containerLevelSelector.css('width', '100%');
+        $containerLevelSelector.css('border-bottom', '2px solid #BDBDBD');
+        $('#clock').css('min-width', '100px');
+        $board.addClass('shadowMaterial').css('min-width', '100%');
     },
 
     /**
@@ -109,10 +108,10 @@ let buscaminasGUI = {
                 buscaminasGUI.checkRecord();
                 buscaminasGUI.levelStyles('uncover-tile', element);
                 setTimeout(function () {
-                    buscaminasGUI.swalPlayAgain(e.message, "success");
+                    buscaminasGUI.swalPlayAgain(e.message, 'success');
                 }, 3000);
             } else {
-                buscaminasGUI.playAudio("explosion.mp3");
+                buscaminasGUI.playAudio('explosion.mp3');
                 buscaminasGUI.openMinesByLevelAnimationTime(e.message);
             }
         }
@@ -127,9 +126,10 @@ let buscaminasGUI = {
         try {
             buscaminas.marcar(coordenada.fila, coordenada.columna);
             if (buscaminas.tableroVisible[coordenada.fila][coordenada.columna] === '🏴') {
-                buscaminasGUI.playAudio("flag.mp3");
+                buscaminasGUI.playAudio('flag.mp3');
                 buscaminasGUI.levelStyles('cover-flag', element);
             } else if (buscaminas.tableroPulsadas[coordenada.fila][coordenada.columna] !== '🞫') {
+                buscaminasGUI.playAudio('unflag.mp3');
                 buscaminasGUI.levelStyles('cover-tile', element);
             }
             buscaminasGUI.updateFlags();
@@ -138,10 +138,10 @@ let buscaminasGUI = {
                 buscaminasGUI.checkRecord();
                 buscaminasGUI.levelStyles('uncover-tile', element);
                 setTimeout(function () {
-                    buscaminasGUI.swalPlayAgain(e.message, "success");
+                    buscaminasGUI.swalPlayAgain(e.message, 'success');
                 }, 3000);
             } else {
-                buscaminasGUI.playAudio("explosion.mp3");
+                buscaminasGUI.playAudio('explosion.mp3');
                 buscaminasGUI.openMinesByLevelAnimationTime(e.message);
             }
         }
@@ -163,10 +163,10 @@ let buscaminasGUI = {
             if (e.message === '¡¡¡ Enhorabuena, has ganado !!!') {
                 buscaminasGUI.levelStyles('uncover-tile', element);
                 setTimeout(function () {
-                    buscaminasGUI.swalPlayAgain(e.message, "success");
+                    buscaminasGUI.swalPlayAgain(e.message, 'success');
                 }, 3000);
             } else {
-                buscaminasGUI.playAudio("explosion.mp3");
+                buscaminasGUI.playAudio('explosion.mp3');
                 buscaminasGUI.openMinesByLevelAnimationTime(e.message);
             }
         }
@@ -206,11 +206,10 @@ let buscaminasGUI = {
                 }
                 buscaminasGUI.levelStyles('uncover-tile', $element);
             }
-            buscaminasGUI.playAudio("abrir.mp3");
+            buscaminasGUI.playAudio('abrir.mp3');
         }
         buscaminas.guardarAperturaCasillas.clear();
     },
-
 
     /**
      * Añade animaciones al input pasado por parámetro.
@@ -281,14 +280,11 @@ let buscaminasGUI = {
         for (let mina of buscaminas.guardarAperturaMinas) {
             let $element = $('#' + mina);
             if (buscaminas.flagGanar) {
-                $element.removeClass('cover-flag') || $element.removeClass('cover-tile')
-                $element.addClass('uncover-tile')
-                $element.addClass('uncover-win')
+                $element.removeClass('cover-flag') || $element.removeClass('cover-tile');
+                $element.addClass('uncover-tile');
+                $element.addClass('uncover-win');
             } else {
-                buscaminasGUI.levelStyles(
-                    colors[Math.floor(Math.random() * (colors.length - 1 - 0)) + 0],
-                    $element
-                );
+                buscaminasGUI.levelStyles(colors[Math.floor(Math.random() * (colors.length - 1 - 0)) + 0], $element);
             }
         }
     },
@@ -298,7 +294,7 @@ let buscaminasGUI = {
      */
     createTimer() {
         $clock.html(`<img src="images/reloj.svg" /><p id="time"></p>`);
-        $time = $("#time");
+        $time = $('#time');
     },
 
     /**
@@ -323,8 +319,8 @@ let buscaminasGUI = {
      * Crea un contador con el número de bombas presentes en el tablero.
      */
     createBombsCounter() {
-        let $article = $("<div></div>");
-        $article.prop("id", "totalMines");
+        let $article = $('<div></div>');
+        $article.prop('id', 'totalMines');
         $article.html(`<img src="images/mina.svg" height="30px"/> ${buscaminas.minas}`);
         $containerLevelSelector.append($article);
     },
@@ -333,8 +329,8 @@ let buscaminasGUI = {
      * Crea un contador con el número de banderas presentes en el tablero.
      */
     createFlagCounter() {
-        let $article = $("<div></div>");
-        $article.prop("id", "totalFlags");
+        let $article = $('<div></div>');
+        $article.prop('id', 'totalFlags');
         $article.html(`<img src="images/bandera.svg" height="30px"/><p id="ptotalFlags">${buscaminas.banderas}</p>`);
         $containerLevelSelector.append($article);
     },
@@ -344,11 +340,11 @@ let buscaminasGUI = {
      */
     createRecordCounter() {
         buscaminasGUI.createTimer();
-        if ($("#record")) {
-            $("#record").remove();
+        if ($('#record')) {
+            $('#record').remove();
         }
-        let $article = $("<div></div>");
-        $article.prop("id", "record");
+        let $article = $('<div></div>');
+        $article.prop('id', 'record');
         $time.html(`<div id="record"></div>`);
         if (localStorage.getItem(buscaminas.nivel) !== null) {
             $article.html(`<img src="images/record.svg" height="30px"/> ${localStorage.getItem(buscaminas.nivel)}`);
@@ -362,7 +358,7 @@ let buscaminasGUI = {
      * Comprueba y actualiza el récord.
      */
     checkRecord() {
-        let time = parseInt($("#clock p").text());
+        let time = parseInt($('#clock p').text());
         if (localStorage.getItem(buscaminas.nivel) === null) {
             localStorage.setItem(buscaminas.nivel, time);
         } else {
@@ -376,8 +372,8 @@ let buscaminasGUI = {
      * Comprueba y actualiza el número de banderas a mostrar.
      */
     updateFlags() {
-        if ($("#ptotalFlags")) {
-            $("#ptotalFlags").text(`${buscaminas.banderas}`)
+        if ($('#ptotalFlags')) {
+            $('#ptotalFlags').text(`${buscaminas.banderas}`);
         }
     },
 
@@ -399,10 +395,10 @@ let buscaminasGUI = {
      */
     playAgain() {
         let $btnPlayAgain = $("<button id='btnPlayAgain'>Jugar de nuevo</button>");
-        $("#playAgain").append($btnPlayAgain);
-        $btnPlayAgain.addClass("shadowMaterialButton");
-        $("#btnPlayAgain").click(() => {
-            $("#seleccionNivel")[0].selectedIndex = 0;
+        $('#playAgain').append($btnPlayAgain);
+        $btnPlayAgain.addClass('shadowMaterialButton');
+        $('#btnPlayAgain').click(() => {
+            $('#seleccionNivel')[0].selectedIndex = 0;
             location.reload();
         });
     },
@@ -413,38 +409,36 @@ let buscaminasGUI = {
      * @param type tipo de mensaje a mostrar.
      */
     swalPlayAgain(msg, type) {
-
-        let gameTime = parseInt($("#clock #time").text());
+        let gameTime = parseInt($('#clock #time').text());
         let levelRecord = buscaminasGUI.getCurrentRecord();
-        let message = "";
+        let message = '';
         let title = msg;
         if (isNaN(gameTime)) {
             gameTime = 0;
         }
-        if (type === "success") {
-            buscaminasGUI.playAudio("win.mp3");
+        if (type === 'success') {
+            buscaminasGUI.playAudio('win.mp3');
             if (levelRecord === gameTime || levelRecord > gameTime || levelRecord === null) {
                 title = `${msg} \n Además has establecido el récord de este nivel en ${gameTime} segundo/s. \n\n`;
             }
         }
-        if (type === "error") {
-            buscaminasGUI.playAudio("lost.mp3");
+        if (type === 'error') {
+            buscaminasGUI.playAudio('lost.mp3');
         }
         message = `Tu tiempo en esta partida ha sido de ${gameTime} segundo/s. \n \n El récord actual es de ${levelRecord} segundo/s.\n \n`;
         Swal.fire({
             title: title,
-            text: message + "¿Deseas jugar de nuevo?",
+            text: message + '¿Deseas jugar de nuevo?',
             type: type,
             showCancelButton: true,
             confirmButtonText: 'Sí',
             cancelButtonText: 'No',
-            confirmButtonColor: "#28a745",
-            cancelButtonColor: "#dc3545",
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#dc3545',
             allowOutsideClick: true,
             allowEscapeKey: true,
-            allowEnterKey: true,
-
-        }).then(result => {
+            allowEnterKey: true
+        }).then((result) => {
             if (result.value) {
                 let timerInterval;
                 Swal.fire({
@@ -453,18 +447,18 @@ let buscaminasGUI = {
                     type: 'info',
                     timer: 3000,
                     onBeforeOpen: () => {
-                        Swal.showLoading()
+                        Swal.showLoading();
                         timerInterval = setInterval(() => {
-                            Swal.getContent().querySelector('strong')
-                                .textContent = (Swal.getTimerLeft() / 1000).toFixed(0)
-                        }, 100)
+                            Swal.getContent().querySelector('strong').textContent = (Swal.getTimerLeft() /
+                                1000).toFixed(0);
+                        }, 100);
                     },
                     onClose: () => {
-                        clearInterval(timerInterval)
-                        $("#seleccionNivel")[0].selectedIndex = 0;
+                        clearInterval(timerInterval);
+                        $('#seleccionNivel')[0].selectedIndex = 0;
                         location.reload();
                     }
-                })
+                });
             }
         });
     },
@@ -476,19 +470,19 @@ let buscaminasGUI = {
      */
     openMinesByLevelAnimationTime(message) {
         switch (buscaminas.nivel) {
-            case "fácil":
+            case 'fácil':
                 setTimeout(function () {
-                    buscaminasGUI.swalPlayAgain(message, "error");
+                    buscaminasGUI.swalPlayAgain(message, 'error');
                 }, 4000);
                 break;
-            case "difícil":
+            case 'difícil':
                 setTimeout(function () {
-                    buscaminasGUI.swalPlayAgain(message, "error");
+                    buscaminasGUI.swalPlayAgain(message, 'error');
                 }, 8000);
                 break;
-            case "experto":
+            case 'experto':
                 setTimeout(function () {
-                    buscaminasGUI.swalPlayAgain(message, "error");
+                    buscaminasGUI.swalPlayAgain(message, 'error');
                 }, 15000);
                 break;
             default:
@@ -516,10 +510,9 @@ let buscaminasGUI = {
      */
     playAudio(file) {
         let $play = new Audio();
-        $play.src = "./sounds/" + file;
+        $play.src = './sounds/' + file;
         $play.play();
     }
-
 };
 
 $(init);
