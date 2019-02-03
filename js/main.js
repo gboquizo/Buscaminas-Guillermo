@@ -218,14 +218,21 @@ export let buscaminas = {
      * @param y coordenada para la columna.
      */
     abrirCeros(x, y) {
+        if (buscaminas.tableroCopia[x][y] !== 0) {
+            if (buscaminas.tableroVisible[x][y] === "🏴" && buscaminas.tableroPulsadas[x][y] === '🞫') {
+                buscaminas.tableroVisible[x][y] = buscaminas.tableroCopia[x][y] + 1;
+                buscaminas.banderas++;
+            }
+        }
         if (buscaminas.tableroCopia[x][y] === 0) {
             buscaminas.tableroCopia[x][y] = -1;
             if (buscaminas.tableroLogica[x][y] === 0) {
+                if (buscaminas.tableroVisible[x][y] === "🏴" && buscaminas.tableroPulsadas[x][y] === '🞫') {
+                    buscaminas.tableroVisible[x][y] = buscaminas.tableroCopia[x][y] + 1;
+                    buscaminas.banderas++;
+                }
                 for (let j = Math.max(x - 1, 0); j <= Math.min(x + 1, buscaminas.filas - 1); j++) {
                     for (let k = Math.max(y - 1, 0); k <= Math.min(y + 1, buscaminas.columnas - 1); k++) {
-                        if (buscaminas.tableroVisible[x][y] === "🏴" && buscaminas.banderas < buscaminas.minas) {
-                            buscaminas.banderas++;
-                        }
                         buscaminas.cargarPulsacion(j, k);
                         buscaminas.abrirCeros(j, k);
                     }
