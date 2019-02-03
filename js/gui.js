@@ -102,9 +102,7 @@ let buscaminasGUI = {
             if (!buscaminas.flagGanar && !buscaminas.flagPerder) {
                 buscaminasGUI.updateGUI();
             }
-            if ($("#ptotalFlags")) {
-                $("#ptotalFlags").text(`${buscaminas.banderas}`)
-            }
+            buscaminasGUI.updateFlags();
         } catch (e) {
             buscaminasGUI.uncoverMines();
             if (e.message === '¡¡¡ Enhorabuena, has ganado !!!') {
@@ -132,9 +130,7 @@ let buscaminasGUI = {
             } else if (buscaminas.tableroPulsadas[coordenada.fila][coordenada.columna] !== '🞫') {
                 buscaminasGUI.levelStyles('cover-tile', element);
             }
-            if ($("#ptotalFlags")) {
-                $("#ptotalFlags").text(`${buscaminas.banderas}`)
-            }
+            buscaminasGUI.updateFlags();
         } catch (e) {
             if (e.message === "'¡¡¡ Enhorabuena, has ganado !!!'") {
                 buscaminasGUI.checkRecord();
@@ -368,6 +364,15 @@ let buscaminasGUI = {
             if (localStorage.getItem(buscaminas.nivel) > time) {
                 localStorage.setItem(buscaminas.nivel, time);
             }
+        }
+    },
+
+     /**
+     * Comprueba y actualiza el número de banderas a mostrar.
+     */
+    updateFlags(){
+        if ($("#ptotalFlags")) {
+            $("#ptotalFlags").text(`${buscaminas.banderas}`)
         }
     },
 
