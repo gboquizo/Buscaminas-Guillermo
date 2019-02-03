@@ -40,10 +40,10 @@ $hover: #F4CD1E
     caret-color: transparent   
 
 .easy-tile
-    +tile-size(48px,48px,1.5rem)
+    +tile-size(65px,65px,1.5rem)
 
 .medium-tile
-    +tile-size(32px,32px,1.2rem)
+    +tile-size(40px,40px,1.2rem)
 
 .hard-tile
     +tile-size(32px,32px,1.2rem)
@@ -105,6 +105,10 @@ $hover: #F4CD1E
 .uncover-win
     background: $succes-color url("../images/estrella.svg") no-repeat center
 
+.uncover-win
+    &:hover
+        background: $hover url("../images/estrella-win.svg") no-repeat
+
 
 #containerMenu
     +flex-center(row)
@@ -112,6 +116,45 @@ $hover: #F4CD1E
         height: 60px
         margin-bottom: 20px
         margin-right: 20px
+
+#clock
+    margin: 0 auto
+    p
+        font-size: 1.3rem
+        font-weight: bold
+        color: #fff
+        min-width: 50px
+    img
+        height: 30px
+
+#totalMines
+    font-weight: bold
+    font-size: 1.3rem
+    color: #FFF
+    margin-right: 10px
+    img
+        height: 30px
+        margin-right: 3px
+
+#totalFlags
+    min-width: 70px
+    font-weight: bold
+    font-size: 1.3rem
+    color: #FFF
+    margin-right: 10px
+    img
+        height: 30px
+        margin-right: 3px
+
+#record
+    min-width: 70px
+    font-weight: bold
+    font-size: 1.3rem
+    color: #FFF
+    margin-right: 10px
+    img
+        height: 30px
+        margin-right: 3px        
 
 #btnPlayAgain
     min-height: 25px
@@ -159,7 +202,7 @@ body
                 background-color: $primary-color
             select
                 height: 35px
-                font-size: 1.3rem
+                font-size: 1.2rem
                 background-color: $primary-color
                 border-radius: 5px
                 border-width: 0px
@@ -171,11 +214,18 @@ body
                 appearance: none
                 font-weight: bold
                 margin: 10px
+                width: 160px
+            div
+                +flex-center(row)
             #board
                 width: auto
                 height: auto
                 border: 0px
-                position: relative    
+                position: relative
+        h1
+            text-align: center
+            font-size: 3rem
+            color: $secondary-text-color    
     footer
         +flex-center(row)
         background-color: $primary-color
