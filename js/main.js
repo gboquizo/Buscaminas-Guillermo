@@ -21,10 +21,11 @@ export let buscaminas = {
 	guardarAperturaCasillas: new Set(),
 	guardarAperturaMinas: new Set(),
 	guardarCoordenadasBanderas: new Set(),
+	guardarSeleccionContiguas: new Set(),
 
 	/**
-     * Realiza la carga inicial de la funcionalidad del buscaminas.
-     */
+	 * Realiza la carga inicial de la funcionalidad del buscaminas.
+	 */
 	init() {
 		buscaminas.flagPerder = false;
 		buscaminas.flagGanar = false;
@@ -37,8 +38,8 @@ export let buscaminas = {
 	},
 
 	/**
-     * Permite seleccionar el nivel de juego.
-     */
+	 * Permite seleccionar el nivel de juego.
+	 */
 	seleccionarNivel() {
 		switch (buscaminas.nivel.toLowerCase()) {
 			case 'fácil':
@@ -65,35 +66,36 @@ export let buscaminas = {
 	},
 
 	/**
-     * Muestra las instrucciones de juego del buscaminas. 
-     */
+	 * Muestra las instrucciones de juego del buscaminas. 
+	 */
 	instrucciones() {
 		let newline = '\n';
 		console.log(
 			'Bienvenido al buscaminas.' +
-				newline +
-				'Para jugar debes hacer uso de jugar.método():' +
-				newline +
-				'Para picar usa realizar.picar(x,y) donde x e y son las coordenadas de la casilla,' +
-				newline +
-				'Para poner una bandera usa jugar.marcar(x,y).' +
-				newline +
-				'Para despejar una casilla usa jugar.despejar(x,y),' +
-				'lo que despejará una casilla con banderas en sus proximidades.'
+			newline +
+			'Para jugar debes hacer uso de jugar.método():' +
+			newline +
+			'Para picar usa realizar.picar(x,y) donde x e y son las coordenadas de la casilla,' +
+			newline +
+			'Para poner una bandera usa jugar.marcar(x,y).' +
+			newline +
+			'Para despejar una casilla usa jugar.despejar(x,y),' +
+			'lo que despejará una casilla con banderas en sus proximidades.'
 		);
 	},
 
 	/**
-     * Muestra los tableros al cargar.
-     */
+	 * Muestra los tableros al cargar.
+	 */
 	mostrar() {
+		console.clear();
 		console.log('Tablero de lógica:\n');
 		console.table(buscaminas.tableroLogica);
 	},
 
 	/**
-     * Genera los tableros y los inicializa con valores por defecto.
-     */
+	 * Genera los tableros y los inicializa con valores por defecto.
+	 */
 	generarTableros() {
 		for (let i = 0; i < buscaminas.filas; i++) {
 			buscaminas.tableroLogica[i] = [];
@@ -110,8 +112,8 @@ export let buscaminas = {
 	},
 
 	/**
-     * Genera y coloca las minas.
-     */
+	 * Genera y coloca las minas.
+	 */
 	generarMinas() {
 		for (let i = 0; i < buscaminas.minas; i++) {
 			let fila = Math.floor(Math.random() * (buscaminas.filas - 1 - 0) + 0);
@@ -128,8 +130,8 @@ export let buscaminas = {
 	},
 
 	/**
-     * Carga los números en función de las minas cercanas.
-     */
+	 * Carga los números en función de las minas cercanas.
+	 */
 	cargarNumeros() {
 		for (let i = 0; i < buscaminas.filas; i++) {
 			for (let j = 0; j < buscaminas.columnas; j++) {
@@ -159,12 +161,12 @@ export let buscaminas = {
 	},
 
 	/**
-     * Cuenta y coloca el número de minas.
-     * @param inicioFila - Inicio de la fila.
-     * @param inicioColumna - Inicio de la columna.
-     * @param finFila - Fin de la fila.
-     * @param finColumna - Fin de la columna.
-     */
+	 * Cuenta y coloca el número de minas.
+	 * @param inicioFila - Inicio de la fila.
+	 * @param inicioColumna - Inicio de la columna.
+	 * @param finFila - Fin de la fila.
+	 * @param finColumna - Fin de la columna.
+	 */
 	contarMinas(inicioFila, inicioColumna, finFila, finColumna) {
 		for (let i = inicioFila; i <= finFila; i++) {
 			for (let j = inicioColumna; j <= finColumna; j++) {
@@ -182,10 +184,10 @@ export let buscaminas = {
 	},
 
 	/**
-     * Pica una casilla.
-     * @param  i coordenada para la fila.
-     * @param  j coordenada para la columna.
-     */
+	 * Pica una casilla.
+	 * @param  i coordenada para la fila.
+	 * @param  j coordenada para la columna.
+	 */
 	picar(i, j) {
 		if (
 			buscaminas.flagPerder ||
@@ -215,10 +217,10 @@ export let buscaminas = {
 	},
 
 	/**
-     * Descubre las casillas, mediante recursividad.
-     * @param x coordenada para la fila.
-     * @param y coordenada para la columna.
-     */
+	 * Descubre las casillas, mediante recursividad.
+	 * @param x coordenada para la fila.
+	 * @param y coordenada para la columna.
+	 */
 	abrirCeros(x, y) {
 		if (buscaminas.tableroCopia[x][y] !== 0) {
 			if (buscaminas.tableroVisible[x][y] === '🏴' && buscaminas.tableroPulsadas[x][y] === '🞫') {
@@ -244,18 +246,18 @@ export let buscaminas = {
 	},
 
 	/**
-     * Carga las casillas pulsadas en su correspondiente matriz.
-     * @param x coordenada para la fila.
-     * @param  y coordenada para la columna.
-     */
+	 * Carga las casillas pulsadas en su correspondiente matriz.
+	 * @param x coordenada para la fila.
+	 * @param  y coordenada para la columna.
+	 */
 	cargarPulsacion(x, y) {
 		buscaminas.tableroPulsadas[x][y] = '🞫';
 		buscaminas.guardarAperturaCasillas.add(x + '-' + y);
 	},
 
 	/**
-     * Actualiza los cambios en el tablero visible.
-     */
+	 * Actualiza los cambios en el tablero visible.
+	 */
 	actualizaCambios() {
 		for (let i = 0; i < buscaminas.filas; i++) {
 			for (let j = 0; j < buscaminas.columnas; j++) {
@@ -270,11 +272,11 @@ export let buscaminas = {
 	},
 
 	/**
-     * Marca y desmarca una casilla con una bandera.
-     *
-     * @param x coordenada para la fila.
-     * @param y coordenada para la columna.
-     */
+	 * Marca y desmarca una casilla con una bandera.
+	 *
+	 * @param x coordenada para la fila.
+	 * @param y coordenada para la columna.
+	 */
 	marcar(x, y) {
 		if (
 			buscaminas.tableroPulsadas[x][y] !== '🞫' &&
@@ -311,15 +313,16 @@ export let buscaminas = {
 	},
 
 	/**
-     * Intenta destapar las casillas colindantes, sólo si el número de banderas
-     * se corresponden con las que indica la casilla. Entonces muestra el campo
-     * de minas actualizado.
-     * En caso de estar las banderas equivocadas se indica que se ha perdido el
-     * juego.
-     * @param x coordenada para la fila.
-     * @param y coordenada para la columna.
-     */
+	 * Intenta destapar las casillas colindantes, sólo si el número de banderas
+	 * se corresponden con las que indica la casilla. Entonces muestra el campo
+	 * de minas actualizado.
+	 * En caso de estar las banderas equivocadas se indica que se ha perdido el
+	 * juego.
+	 * @param x coordenada para la fila.
+	 * @param y coordenada para la columna.
+	 */
 	despejar(x, y) {
+		buscaminas.guardarSeleccionContiguas.clear();
 		if (x > buscaminas.filas || y > buscaminas.columnas) {
 			throw new Error('Coordenadas inválidas.');
 		}
@@ -384,14 +387,67 @@ export let buscaminas = {
 					buscaminas.picar(x - 1, y + 1);
 				}
 			}
+		} else {
+			if (x > 0 && y > 0) {
+				if (
+					buscaminas.tableroVisible[x - 1][y - 1] !== '🏴' &&
+					buscaminas.tableroPulsadas[x - 1][y - 1] !== '🞫'
+				) {
+					buscaminas.guardarSeleccionContiguas.add(x - 1 + '-' + (y - 1));
+				}
+			}
+			if (y > 0) {
+				if (buscaminas.tableroVisible[x][y - 1] !== '🏴' && buscaminas.tableroPulsadas[x][y - 1] !== '🞫') {
+					buscaminas.guardarSeleccionContiguas.add(x + '-' + (y - 1));
+				}
+			}
+			if (y > 0 && x < buscaminas.filas - 1) {
+				if (
+					buscaminas.tableroVisible[x + 1][y - 1] !== '🏴' &&
+					buscaminas.tableroPulsadas[x + 1][y - 1] !== '🞫'
+				) {
+					buscaminas.guardarSeleccionContiguas.add(x + 1 + '-' + (y - 1));
+				}
+			}
+			if (x > 0) {
+				if (buscaminas.tableroVisible[x - 1][y] !== '🏴' && buscaminas.tableroPulsadas[x - 1][y] !== '🞫') {
+					buscaminas.guardarSeleccionContiguas.add(x - 1 + '-' + y);
+				}
+			}
+			if (x < buscaminas.filas - 1) {
+				if (buscaminas.tableroVisible[x + 1][y] !== '🏴' && buscaminas.tableroPulsadas[x + 1][y] !== '🞫') {
+					buscaminas.guardarSeleccionContiguas.add(x + 1 + '-' + y);
+				}
+			}
+			if (y < buscaminas.columnas - 1) {
+				if (buscaminas.tableroVisible[x][y + 1] !== '🏴' && buscaminas.tableroPulsadas[x][y + 1] !== '🞫') {
+					buscaminas.guardarSeleccionContiguas.add(x + '-' + (y + 1));
+				}
+			}
+			if (x < buscaminas.filas - 1 && y < buscaminas.columnas - 1) {
+				if (
+					buscaminas.tableroVisible[x + 1][y + 1] !== '🏴' &&
+					buscaminas.tableroPulsadas[x + 1][y + 1] !== '🞫'
+				) {
+					buscaminas.guardarSeleccionContiguas.add(x + 1 + '-' + (y + 1));
+				}
+			}
+			if (x > 0 && y < buscaminas.columnas - 1) {
+				if (
+					buscaminas.tableroVisible[x - 1][y + 1] !== '🏴' &&
+					buscaminas.tableroPulsadas[x - 1][y + 1] !== '🞫'
+				) {
+					buscaminas.guardarSeleccionContiguas.add(x - 1 + '-' + (y + 1));
+				}
+			}
 		}
 	},
 
 	/**
-     * Obtiene el numero de banderas de las casillas de alrededor de la casilla pasada por parámetro
-     * @param x coordenada de la fila
-     * @param y coordenada de la columna
-     */
+	 * Obtiene el numero de banderas de las casillas de alrededor de la casilla pasada por parámetro
+	 * @param x coordenada de la fila
+	 * @param y coordenada de la columna
+	 */
 	obtenerBanderasAlrededor(x, y) {
 		let totalBanderas = 0;
 		if (buscaminas.tableroPulsadas[x][y] === '🞫') {
@@ -447,8 +503,8 @@ export let buscaminas = {
 	},
 
 	/**
-     * Comprueba si se gana de manera convencional.
-     */
+	 * Comprueba si se gana de manera convencional.
+	 */
 	comprobarGanador() {
 		if (buscaminas.obtenerPulsadas() === buscaminas.obtenerPendientesParaGanar()) {
 			buscaminas.flagGanar = true;
@@ -458,8 +514,8 @@ export let buscaminas = {
 	},
 
 	/**
-     * Devuelve el número de casillas pulsadas en el tablero.
-     */
+	 * Devuelve el número de casillas pulsadas en el tablero.
+	 */
 	obtenerPulsadas() {
 		let contador = 0;
 		for (let i = 0; i < buscaminas.filas; i++) {
@@ -473,8 +529,8 @@ export let buscaminas = {
 	},
 
 	/**
-     * Devuelve el número de casillas que deben quedar pendientes para ganar del tablero.
-     */
+	 * Devuelve el número de casillas que deben quedar pendientes para ganar del tablero.
+	 */
 	obtenerPendientesParaGanar() {
 		let contador = 0;
 		for (let i = 0; i < buscaminas.filas; i++) {
@@ -488,8 +544,8 @@ export let buscaminas = {
 	},
 
 	/**
-     * Devuelve el número de banderas del tablero.
-     */
+	 * Devuelve el número de banderas del tablero.
+	 */
 	obtenerBanderasDelTablero() {
 		let banderas = 0;
 		for (let i = 0; i < buscaminas.filas; i++) {
@@ -503,8 +559,8 @@ export let buscaminas = {
 	},
 
 	/**
-     * Comprueba si se ha ganado mediante el uso de banderas.
-     */
+	 * Comprueba si se ha ganado mediante el uso de banderas.
+	 */
 	comprobarGanadorConBanderas() {
 		let casillasNoPulsadas = 0;
 		let casillasYaPulsadas = 0;
