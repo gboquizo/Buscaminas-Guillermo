@@ -89,8 +89,6 @@ export let buscaminas = {
 	mostrar() {
 		console.log('Tablero de lógica:\n');
 		console.table(buscaminas.tableroLogica);
-		console.log('Tablero visible:\n');
-		console.table(buscaminas.tableroVisible);
 	},
 
 	/**
