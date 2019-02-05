@@ -3,21 +3,21 @@
  * @author Guillermo Boquizo Sánchez.
  */
 
-import {
-	buscaminas
-} from './main.js';
+import { buscaminas } from './main.js';
 
 let $containerLevelSelector;
 let $board;
 let $clock;
 let $time;
+let $music;
 
 /**
  * Carga la interfaz de juego.
  */
-let init = function () {
+let init = function() {
 	$('#seleccionNivel')[0].selectedIndex = 0;
 	$('#seleccionNivel').change(buscaminasGUI.start);
+	$('#activarMusica').click(buscaminasGUI.musicSettings);
 	$containerLevelSelector = $('#containerLevelSelector');
 	$clock = $('#clock');
 	$board = $('#board');
@@ -28,7 +28,6 @@ let init = function () {
  * Objeto buscaminasGUI.
  */
 let buscaminasGUI = {
-
 	/**
 	 * Carga el juego.
 	 */
@@ -46,6 +45,7 @@ let buscaminasGUI = {
 		buscaminasGUI.disableContextMenu();
 		buscaminasGUI.playAgain();
 		buscaminasGUI.showBoard();
+		buscaminasGUI.stopMusic();
 	},
 
 	/**
@@ -71,10 +71,10 @@ let buscaminasGUI = {
 			for (let j = 0; j < buscaminas.columnas; j++) {
 				let $tile = $(`<input type="text" id="${i}-${j}" readonly></input>`);
 				buscaminasGUI.levelStyles('cover-tile', $tile);
-				$tile.click(function () {
+				$tile.click(function() {
 					buscaminasGUI.picarGUI($(this));
 				});
-				$tile.mousedown(function (event) {
+				$tile.mousedown(function(event) {
 					switch (event.buttons) {
 						case 2:
 							buscaminasGUI.marcarGUI($(this));
@@ -108,10 +108,11 @@ let buscaminasGUI = {
 			if (e.message === '¡¡¡ Enhorabuena, has ganado !!!') {
 				buscaminasGUI.checkRecord();
 				buscaminasGUI.levelStyles('uncover-tile', element);
-				setTimeout(function () {
+				setTimeout(function() {
 					buscaminasGUI.swalPlayAgain(e.message, 'success');
 				}, 3000);
 			} else {
+				buscaminasGUI.stopMusic();
 				buscaminasGUI.playAudio('explosion.mp3');
 				buscaminasGUI.openMinesByLevelAnimationTime(e.message);
 			}
@@ -142,7 +143,7 @@ let buscaminasGUI = {
 			if (e.message === "'¡¡¡ Enhorabuena, has ganado !!!'") {
 				buscaminasGUI.checkRecord();
 				buscaminasGUI.levelStyles('uncover-tile', element);
-				setTimeout(function () {
+				setTimeout(function() {
 					buscaminasGUI.swalPlayAgain(e.message, 'success');
 				}, 3000);
 			} else {
@@ -164,10 +165,11 @@ let buscaminasGUI = {
 				buscaminasGUI.updateGUI();
 				if (buscaminas.guardarSeleccionContiguas.size > 0) {
 					for (let tile of buscaminas.guardarSeleccionContiguas) {
-						$('#' + tile).removeClass("fadeInLeftBig")
-						$('#' + tile).removeClass("rollIn")
-						$('#' + tile).addClass("cover-tile-opacity", 400,
-							() => $('#' + tile).removeClass("cover-tile-opacity"));
+						$('#' + tile).removeClass('fadeInLeftBig');
+						$('#' + tile).removeClass('rollIn');
+						$('#' + tile).addClass('cover-tile-opacity', 400, () =>
+							$('#' + tile).removeClass('cover-tile-opacity')
+						);
 					}
 				}
 			}
@@ -175,7 +177,7 @@ let buscaminasGUI = {
 			buscaminasGUI.uncoverMines();
 			if (e.message === '¡¡¡ Enhorabuena, has ganado !!!') {
 				buscaminasGUI.levelStyles('uncover-tile', element);
-				setTimeout(function () {
+				setTimeout(function() {
 					buscaminasGUI.swalPlayAgain(e.message, 'success');
 				}, 3000);
 			} else {
@@ -220,10 +222,7 @@ let buscaminasGUI = {
 				} else {
 					$element.val(buscaminas.tableroVisible[fila][columna]);
 				}
-				buscaminasGUI.levelStyles(
-					'uncover-tile',
-					$element,
-					"delay-" + counterDelay + "s");
+				buscaminasGUI.levelStyles('uncover-tile', $element, 'delay-' + counterDelay + 's');
 			}
 			buscaminasGUI.playAudio('abrir.mp3');
 		}
@@ -253,16 +252,16 @@ let buscaminasGUI = {
 	 * @param classs clase que se añadirá al input.
 	 * @param input elemento al que se le añade la clase
 	 */
-	levelStyles(classs, input, delay = "") {
+	levelStyles(classs, input, delay = '') {
 		switch (buscaminas.nivel) {
 			case 'fácil':
-				buscaminasGUI.animationInput(input, classs, "fadeInLeftBig", "rollIn " + delay, 'easy-tile');
+				buscaminasGUI.animationInput(input, classs, 'fadeInLeftBig', 'rollIn ' + delay, 'easy-tile');
 				break;
 			case 'difícil':
-				buscaminasGUI.animationInput(input, classs, "fadeInLeftBig", "rollIn " + delay, 'medium-tile');
+				buscaminasGUI.animationInput(input, classs, 'fadeInLeftBig', 'rollIn ' + delay, 'medium-tile');
 				break;
 			case 'experto':
-				buscaminasGUI.animationInput(input, classs, "fadeInLeftBig", "rollIn " + delay, 'hard-tile');
+				buscaminasGUI.animationInput(input, classs, 'fadeInLeftBig', 'rollIn ' + delay, 'hard-tile');
 				break;
 			default:
 				break;
@@ -276,10 +275,8 @@ let buscaminasGUI = {
 	cleanCSSClass(element) {
 		if (element) {
 			if (element) {
-				if (
-					element.prop("class") !== ""
-				) {
-					element.prop("class", "");
+				if (element.prop('class') !== '') {
+					element.prop('class', '');
 				}
 			}
 		}
@@ -311,7 +308,11 @@ let buscaminasGUI = {
 				$element.addClass('uncover-tile');
 				$element.addClass('uncover-win');
 			} else {
-				buscaminasGUI.levelStyles(colors[Math.floor(Math.random() * (colors.length - 1 - 0)) + 0], $element, "delay-" + counterDelay + "s");
+				buscaminasGUI.levelStyles(
+					colors[Math.floor(Math.random() * (colors.length - 1 - 0)) + 0],
+					$element,
+					'delay-' + counterDelay + 's'
+				);
 			}
 		}
 	},
@@ -443,12 +444,14 @@ let buscaminasGUI = {
 			gameTime = 0;
 		}
 		if (type === 'success') {
+			buscaminasGUI.stopMusic();
 			buscaminasGUI.playAudio('win.mp3');
 			if (levelRecord === gameTime || levelRecord > gameTime || levelRecord === null) {
 				title = `${msg} \n Además has establecido el récord de este nivel en ${gameTime} segundo/s. \n\n`;
 			}
 		}
 		if (type === 'error') {
+			buscaminasGUI.stopMusic();
 			buscaminasGUI.playAudio('lost.mp3');
 		}
 		message = `Tu tiempo en esta partida ha sido de ${gameTime} segundo/s. \n \n El récord actual es de ${levelRecord} segundo/s.\n \n`;
@@ -497,17 +500,17 @@ let buscaminasGUI = {
 	openMinesByLevelAnimationTime(message) {
 		switch (buscaminas.nivel) {
 			case 'fácil':
-				setTimeout(function () {
+				setTimeout(function() {
 					buscaminasGUI.swalPlayAgain(message, 'error');
 				}, 4000);
 				break;
 			case 'difícil':
-				setTimeout(function () {
+				setTimeout(function() {
 					buscaminasGUI.swalPlayAgain(message, 'error');
 				}, 6000);
 				break;
 			case 'experto':
-				setTimeout(function () {
+				setTimeout(function() {
 					buscaminasGUI.swalPlayAgain(message, 'error');
 				}, 11000);
 				break;
@@ -521,11 +524,11 @@ let buscaminasGUI = {
 	 */
 	disableContextMenu() {
 		if ($(document).on()) {
-			$(document).contextmenu(function (e) {
+			$(document).contextmenu(function(e) {
 				e.preventDefault();
 			}, false);
 		} else {
-			$(document).attachEvent('oncontextmenu', function () {
+			$(document).attachEvent('oncontextmenu', function() {
 				$(window).event.returnValue = false;
 			});
 		}
@@ -544,12 +547,29 @@ let buscaminasGUI = {
 	 * Muestra el tablero interno.
 	 */
 	showBoard() {
-		let mostrarTablero = (function () {
+		let mostrarTablero = (function() {
 			return {
 				mostrar: () => buscaminas.mostrar()
 			};
 		})();
 		window.buscaminas = mostrarTablero;
+	},
+
+	musicSettings() {
+		$music = $('#music');
+		let $activateMusic = $('#activarMusica');
+		$music.prop('playing', !$music.prop('playing'));
+		if ($music.prop('playing')) {
+			$activateMusic.prop('src', './images/stop.svg');
+			$music.html('<audio controls autoplay loop> <source src="sounds/musica.mp3" type="audio/mpeg" /></audio>');
+		} else {
+			$activateMusic.prop('src', './images/play.svg');
+			buscaminasGUI.stopMusic();
+		}
+	},
+
+	stopMusic() {
+		$music.html('<audio controls muted></audio>');
 	}
 };
 
