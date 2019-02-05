@@ -387,6 +387,7 @@ export let buscaminas = {
 					buscaminas.picar(x - 1, y + 1);
 				}
 			}
+			buscaminas.guardarSeleccionContiguas.clear();
 		} else {
 			if (x > 0 && y > 0) {
 				if (

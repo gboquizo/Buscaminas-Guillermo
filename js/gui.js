@@ -159,16 +159,12 @@ let buscaminasGUI = {
 			buscaminas.despejar(coordenada.fila, coordenada.columna);
 			if (!buscaminas.flagGanar && !buscaminas.flagPerder) {
 				buscaminasGUI.updateGUI();
-			}
-			if (buscaminas.guardarSeleccionContiguas.size > 0) {
-				for (let tile of buscaminas.guardarSeleccionContiguas) {
-					for (let index = 0; index < 2; index++) {
-						$('#' + tile).removeClass('cover-tile').animate({
-							opacity: 0.5
-						}, 200);
-						$('#' + tile).addClass('cover-tile').animate({
-							opacity: 1
-						}, 200);
+				if (buscaminas.guardarSeleccionContiguas.size > 0) {
+					for (let tile of buscaminas.guardarSeleccionContiguas) {
+						for (let index = 0; index < 2; index++) {
+							$('#' + tile).addClass('cover-tile-opacity', 400,
+								() => $('#' + tile).removeClass('cover-tile-opacity'))
+						}
 					}
 				}
 			}
@@ -208,7 +204,10 @@ let buscaminasGUI = {
 			return;
 		}
 
+		let counterDelay = 0;
+
 		for (const item of buscaminas.guardarAperturaCasillas) {
+			counterDelay++;
 			let fila = parseInt(item.split('-')[0]);
 			let columna = parseInt(item.split('-')[1]);
 			let $element = $('#' + fila + '-' + columna);
@@ -218,7 +217,10 @@ let buscaminasGUI = {
 				} else {
 					$element.val(buscaminas.tableroVisible[fila][columna]);
 				}
-				buscaminasGUI.levelStyles('uncover-tile', $element);
+				buscaminasGUI.levelStyles(
+					'uncover-tile',
+					$element,
+					"delay-" + counterDelay + "s");
 			}
 			buscaminasGUI.playAudio('abrir.mp3');
 		}
@@ -228,16 +230,18 @@ let buscaminasGUI = {
 	/**
 	 * Añade animaciones al input pasado por parámetro.
 	 * @param input elemento DOM.
-	 * @param classs clase css que contiene la animación.
-	 * @param nivel nivel actual de la partida.
+	 * @param targetClass clase css que contiene la animación.
+	 * @param initialAnimation animación que se le añadirá a los input con la clase inicial.
+	 * @param callbackAnimation animación que se le añadirá a los input que no tengan la clase inicial.
+	 * @param level nivel actual de la partida.
 	 */
-	animationInput(input, classs, nivel) {
-		if (classs === 'cover-tile') {
+	animationInput(input, targetClass, initialAnimation, callbackAnimation, level) {
+		if (targetClass === 'cover-tile') {
 			buscaminasGUI.cleanCSSClass(input);
-			input.addClass(nivel + ' ' + classs);
+			input.addClass('animated ' + initialAnimation + ' faster ' + level + ' ' + targetClass);
 		} else {
 			buscaminasGUI.cleanCSSClass(input);
-			input.addClass(nivel + ' ' + classs);
+			input.addClass('animated ' + callbackAnimation + ' faster ' + level + ' ' + targetClass);
 		}
 	},
 
@@ -246,16 +250,16 @@ let buscaminasGUI = {
 	 * @param classs clase que se añadirá al input.
 	 * @param input elemento al que se le añade la clase
 	 */
-	levelStyles(classs, input) {
+	levelStyles(classs, input, delay = "") {
 		switch (buscaminas.nivel) {
 			case 'fácil':
-				buscaminasGUI.animationInput(input, classs, 'easy-tile');
+				buscaminasGUI.animationInput(input, classs, "fadeInLeftBig", "rollIn " + delay, 'easy-tile');
 				break;
 			case 'difícil':
-				buscaminasGUI.animationInput(input, classs, 'medium-tile');
+				buscaminasGUI.animationInput(input, classs, "fadeInLeftBig", "rollIn " + delay, 'medium-tile');
 				break;
 			case 'experto':
-				buscaminasGUI.animationInput(input, classs, 'hard-tile');
+				buscaminasGUI.animationInput(input, classs, "fadeInLeftBig", "rollIn " + delay, 'hard-tile');
 				break;
 			default:
 				break;
@@ -267,9 +271,16 @@ let buscaminasGUI = {
 	 * @param element elemento del DOM.
 	 */
 	cleanCSSClass(element) {
-		if (element) {
+		/* if (element) {
 			if (element.hasClass('cover-tile') || element.hasClass('cover-flag') || element.hasClass('uncover-tile')) {
 				element.prop('class', '');
+			}
+		} */
+		if (element) {
+			if (
+				element.prop("class") !== ""
+			) {
+				element.prop("class", "");
 			}
 		}
 	},
@@ -291,14 +302,16 @@ let buscaminasGUI = {
 			'color9',
 			'color10'
 		];
+		let counterDelay = 0;
 		for (let mina of buscaminas.guardarAperturaMinas) {
+			counterDelay++;
 			let $element = $('#' + mina);
 			if (buscaminas.flagGanar) {
 				$element.removeClass('cover-flag') || $element.removeClass('cover-tile');
 				$element.addClass('uncover-tile');
 				$element.addClass('uncover-win');
 			} else {
-				buscaminasGUI.levelStyles(colors[Math.floor(Math.random() * (colors.length - 1 - 0)) + 0], $element);
+				buscaminasGUI.levelStyles(colors[Math.floor(Math.random() * (colors.length - 1 - 0)) + 0], $element, "delay-" + counterDelay + "s");
 			}
 		}
 	},
@@ -491,12 +504,12 @@ let buscaminasGUI = {
 			case 'difícil':
 				setTimeout(function () {
 					buscaminasGUI.swalPlayAgain(message, 'error');
-				}, 8000);
+				}, 6000);
 				break;
 			case 'experto':
 				setTimeout(function () {
 					buscaminasGUI.swalPlayAgain(message, 'error');
-				}, 15000);
+				}, 11000);
 				break;
 			default:
 				return;
