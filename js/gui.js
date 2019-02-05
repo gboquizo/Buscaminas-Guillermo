@@ -28,6 +28,7 @@ let init = function () {
  * Objeto buscaminasGUI.
  */
 let buscaminasGUI = {
+
 	/**
 	 * Carga el juego.
 	 */
@@ -162,7 +163,6 @@ let buscaminasGUI = {
 			if (!buscaminas.flagGanar && !buscaminas.flagPerder) {
 				buscaminasGUI.updateGUI();
 				if (buscaminas.guardarSeleccionContiguas.size > 0) {
-					console.log(buscaminas.guardarSeleccionContiguas)
 					for (let tile of buscaminas.guardarSeleccionContiguas) {
 						$('#' + tile).removeClass("fadeInLeftBig")
 						$('#' + tile).removeClass("rollIn")
@@ -171,7 +171,6 @@ let buscaminasGUI = {
 					}
 				}
 			}
-
 		} catch (e) {
 			buscaminasGUI.uncoverMines();
 			if (e.message === '¡¡¡ Enhorabuena, has ganado !!!') {
@@ -276,10 +275,6 @@ let buscaminasGUI = {
 	 */
 	cleanCSSClass(element) {
 		if (element) {
-			//if (element.hasClass('cover-tile') || element.hasClass('cover-flag') || element.hasClass('uncover-tile')) {
-			//	element.prop('class', '');
-			//}
-
 			if (element) {
 				if (
 					element.prop("class") !== ""
