@@ -160,14 +160,16 @@ let buscaminasGUI = {
 			if (!buscaminas.flagGanar && !buscaminas.flagPerder) {
 				buscaminasGUI.updateGUI();
 				if (buscaminas.guardarSeleccionContiguas.size > 0) {
+					console.log(buscaminas.guardarSeleccionContiguas)
 					for (let tile of buscaminas.guardarSeleccionContiguas) {
-						for (let index = 0; index < 2; index++) {
-							$('#' + tile).addClass('cover-tile-opacity', 400,
-								() => $('#' + tile).removeClass('cover-tile-opacity'))
-						}
+						$('#' + tile).removeClass("fadeInLeftBig")
+						$('#' + tile).removeClass("rollIn")
+						$('#' + tile).addClass("cover-tile-opacity", 400,
+							() => $('#' + tile).removeClass("cover-tile-opacity"));
 					}
 				}
 			}
+
 		} catch (e) {
 			buscaminasGUI.uncoverMines();
 			if (e.message === '¡¡¡ Enhorabuena, has ganado !!!') {
@@ -271,16 +273,17 @@ let buscaminasGUI = {
 	 * @param element elemento del DOM.
 	 */
 	cleanCSSClass(element) {
-		/* if (element) {
-			if (element.hasClass('cover-tile') || element.hasClass('cover-flag') || element.hasClass('uncover-tile')) {
-				element.prop('class', '');
-			}
-		} */
 		if (element) {
-			if (
-				element.prop("class") !== ""
-			) {
-				element.prop("class", "");
+			//if (element.hasClass('cover-tile') || element.hasClass('cover-flag') || element.hasClass('uncover-tile')) {
+			//	element.prop('class', '');
+			//}
+
+			if (element) {
+				if (
+					element.prop("class") !== ""
+				) {
+					element.prop("class", "");
+				}
 			}
 		}
 	},

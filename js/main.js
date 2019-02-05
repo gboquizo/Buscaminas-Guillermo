@@ -387,8 +387,9 @@ export let buscaminas = {
 					buscaminas.picar(x - 1, y + 1);
 				}
 			}
-			buscaminas.guardarSeleccionContiguas.clear();
+
 		} else {
+			buscaminas.guardarSeleccionContiguas.clear();
 			if (x > 0 && y > 0) {
 				if (
 					buscaminas.tableroVisible[x - 1][y - 1] !== '🏴' &&

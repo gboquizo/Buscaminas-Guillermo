@@ -40,7 +40,7 @@ $hover: #F4CD1E
     caret-color: transparent   
 
 .easy-tile
-    +tile-size(65px,65px,1.5rem)
+    +tile-size(70px,70px,1.5rem)
 
 .medium-tile
     +tile-size(40px,40px,1.2rem)
@@ -51,6 +51,11 @@ $hover: #F4CD1E
 .cover-tile
     background: $primary-color url("../images/bloque.svg") no-repeat
     background-size: contain
+
+.cover-tile-opacity
+    background: $primary-color url("../images/bloque.svg") no-repeat
+    background-size: contain
+    opacity: 0.5
 
 .cover-tile
     &:hover
@@ -118,7 +123,7 @@ $hover: #F4CD1E
         margin-right: 20px
 
 #clock
-    margin: 0 auto
+    margin-right: 20px
     p
         font-size: 1.3rem
         font-weight: bold
@@ -199,7 +204,7 @@ body
             article
                 +flex-center(row)
                 text-align: center
-                background: $primary-color
+                background-color: $primary-color
             select
                 height: 35px
                 font-size: 1.2rem
@@ -214,7 +219,7 @@ body
                 appearance: none
                 font-weight: bold
                 margin: 10px
-                width: 160px
+                width: 200px
             div
                 +flex-center(row)
             #board
