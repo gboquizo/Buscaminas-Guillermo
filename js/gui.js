@@ -125,16 +125,18 @@ let buscaminasGUI = {
 		let coordenada = buscaminasGUI.getCoordinates(element);
 		try {
 			buscaminas.marcar(coordenada.fila, coordenada.columna);
-			if (buscaminas.tableroVisible[coordenada.fila][coordenada.columna] === '🏴') {
-				buscaminasGUI.playAudio('flag.mp3');
-				buscaminasGUI.levelStyles('cover-flag', element);
-			} else if (buscaminas.tableroPulsadas[coordenada.fila][coordenada.columna] !== '🞫') {
-				if (buscaminas.banderas >= 1) {
-					buscaminasGUI.playAudio('unflag.mp3');
+			if (!buscaminas.flagGanar && !buscaminas.flagPerder) {
+				if (buscaminas.tableroVisible[coordenada.fila][coordenada.columna] === '🏴') {
+					buscaminasGUI.playAudio('flag.mp3');
+					buscaminasGUI.levelStyles('cover-flag', element);
+				} else if (buscaminas.tableroPulsadas[coordenada.fila][coordenada.columna] !== '🞫') {
+					if (buscaminas.banderas >= 1) {
+						buscaminasGUI.playAudio('unflag.mp3');
+					}
+					buscaminasGUI.levelStyles('cover-tile', element);
 				}
-				buscaminasGUI.levelStyles('cover-tile', element);
+				buscaminasGUI.updateFlags();
 			}
-			buscaminasGUI.updateFlags();
 		} catch (e) {
 			if (e.message === "'¡¡¡ Enhorabuena, has ganado !!!'") {
 				buscaminasGUI.checkRecord();
