@@ -19,6 +19,7 @@ let init = function() {
 	$('#seleccionNivel').change(buscaminasGUI.start);
 	$('#activarMusica').click(buscaminasGUI.musicSettings);
 	$containerLevelSelector = $('#containerLevelSelector');
+	$music = $('#music');
 	$clock = $('#clock');
 	$board = $('#board');
 	$containerLevelSelector.addClass('shadowMaterialButton');
