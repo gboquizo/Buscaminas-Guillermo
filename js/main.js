@@ -34,7 +34,6 @@ export let buscaminas = {
 		buscaminas.generarTableros();
 		buscaminas.generarMinas();
 		buscaminas.cargarNumeros();
-		buscaminas.mostrar();
 	},
 
 	/**
@@ -69,18 +68,23 @@ export let buscaminas = {
 	 * Muestra las instrucciones de juego del buscaminas. 
 	 */
 	instrucciones() {
+		console.clear();
 		let newline = '\n';
 		console.log(
 			'Bienvenido al buscaminas.' +
 			newline +
-			'Para jugar debes hacer uso de jugar.método():' +
+			'Para jugar utiliza la interfaz gráfica:' +
 			newline +
-			'Para picar usa realizar.picar(x,y) donde x e y son las coordenadas de la casilla,' +
+			'Para picar, simplemente haz click izquierdo en una casilla' +
 			newline +
-			'Para poner una bandera usa jugar.marcar(x,y).' +
+			'Para poner o quitar una bandera, haz click derecho.' +
 			newline +
-			'Para despejar una casilla usa jugar.despejar(x,y),' +
-			'lo que despejará una casilla con banderas en sus proximidades.'
+			'Para despejar una casilla, haz click con ambos botones en una casilla' +
+			newline +
+			'previamente picada, una vez hayas marcado las minas próximas,' +
+			'lo que despejará una casilla con banderas en sus proximidades.' +
+			newline +
+			'Para ver el tablero escribe buscaminas.mostrar()'
 		);
 	},
 
@@ -104,9 +108,9 @@ export let buscaminas = {
 			buscaminas.tableroPulsadas[i] = [];
 			for (let j = 0; j < buscaminas.columnas; j++) {
 				buscaminas.tableroLogica[i][j] = 0;
-				buscaminas.tableroVisible[i][j] = '■';
+				buscaminas.tableroVisible[i][j] = "■";
 				buscaminas.tableroCopia[i][j] = 0;
-				buscaminas.tableroPulsadas[i][j] = 'NP';
+				buscaminas.tableroPulsadas[i][j] = "NP";
 			}
 		}
 	},
@@ -119,12 +123,12 @@ export let buscaminas = {
 			let fila = Math.floor(Math.random() * (buscaminas.filas - 1 - 0) + 0);
 			let columna = Math.floor(Math.random() * (buscaminas.columnas - 1 - 0) + 0);
 
-			while (buscaminas.tableroLogica[fila][columna] === '💣') {
+			while (buscaminas.tableroLogica[fila][columna] === "💣") {
 				fila = Math.floor(Math.random() * (buscaminas.filas - 1 - 0) + 0);
 				columna = Math.floor(Math.random() * (buscaminas.columnas - 1 - 0) + 0);
 			}
-			buscaminas.tableroLogica[fila][columna] = '💣';
-			buscaminas.tableroCopia[fila][columna] = '💣';
+			buscaminas.tableroLogica[fila][columna] = "💣";
+			buscaminas.tableroCopia[fila][columna] = "💣";
 			buscaminas.guardarAperturaMinas.add(fila + '-' + columna);
 		}
 	},
@@ -135,7 +139,7 @@ export let buscaminas = {
 	cargarNumeros() {
 		for (let i = 0; i < buscaminas.filas; i++) {
 			for (let j = 0; j < buscaminas.columnas; j++) {
-				if (buscaminas.tableroLogica[i][j] === '💣') {
+				if (buscaminas.tableroLogica[i][j] === "💣") {
 					if (i == 0 && j == 0) {
 						buscaminas.contarMinas(i, j, i + 1, j + 1);
 					} else if (i == 0 && (j > 0 && j < buscaminas.minas - 1)) {
@@ -170,7 +174,7 @@ export let buscaminas = {
 	contarMinas(inicioFila, inicioColumna, finFila, finColumna) {
 		for (let i = inicioFila; i <= finFila; i++) {
 			for (let j = inicioColumna; j <= finColumna; j++) {
-				if (buscaminas.tableroLogica[i][j] !== '💣') {
+				if (buscaminas.tableroLogica[i][j] !== "💣") {
 					if (buscaminas.tableroLogica[i][j] === '0') {
 						buscaminas.tableroLogica[i][j] = 0 + 1;
 						buscaminas.tableroCopia[i][j] = 0 + 1;
@@ -192,13 +196,13 @@ export let buscaminas = {
 		if (
 			buscaminas.flagPerder ||
 			buscaminas.flagGanar ||
-			buscaminas.tableroPulsadas[i][j] === '🞫' ||
-			buscaminas.tableroVisible[i][j] === '🏴'
+			buscaminas.tableroPulsadas[i][j] === "🞫" ||
+			buscaminas.tableroVisible[i][j] === "🏴"
 		) {
 			return;
 		}
 
-		if (buscaminas.tableroLogica[i][j] === '💣') {
+		if (buscaminas.tableroLogica[i][j] === "💣") {
 			buscaminas.flagPerder = true;
 			throw new Error('Pulsaste una mina, has perdido');
 		}
@@ -223,7 +227,7 @@ export let buscaminas = {
 	 */
 	abrirCeros(x, y) {
 		if (buscaminas.tableroCopia[x][y] !== 0) {
-			if (buscaminas.tableroVisible[x][y] === '🏴' && buscaminas.tableroPulsadas[x][y] === '🞫') {
+			if (buscaminas.tableroVisible[x][y] === "🏴" && buscaminas.tableroPulsadas[x][y] === "🞫") {
 				buscaminas.tableroVisible[x][y] = buscaminas.tableroCopia[x][y];
 				buscaminas.banderas++;
 			}
@@ -231,7 +235,7 @@ export let buscaminas = {
 		if (buscaminas.tableroCopia[x][y] === 0) {
 			buscaminas.tableroCopia[x][y] = -1;
 			if (buscaminas.tableroLogica[x][y] === 0) {
-				if (buscaminas.tableroVisible[x][y] === '🏴' && buscaminas.tableroPulsadas[x][y] === '🞫') {
+				if (buscaminas.tableroVisible[x][y] === "🏴" && buscaminas.tableroPulsadas[x][y] === "🞫") {
 					buscaminas.tableroVisible[x][y] = buscaminas.tableroCopia[x][y] + 1;
 					buscaminas.banderas++;
 				}
@@ -251,7 +255,7 @@ export let buscaminas = {
 	 * @param  y coordenada para la columna.
 	 */
 	cargarPulsacion(x, y) {
-		buscaminas.tableroPulsadas[x][y] = '🞫';
+		buscaminas.tableroPulsadas[x][y] = "🞫";
 		buscaminas.guardarAperturaCasillas.add(x + '-' + y);
 	},
 
@@ -262,8 +266,8 @@ export let buscaminas = {
 		for (let i = 0; i < buscaminas.filas; i++) {
 			for (let j = 0; j < buscaminas.columnas; j++) {
 				if (
-					buscaminas.tableroPulsadas[i][j] === '🞫' &&
-					(buscaminas.tableroVisible[i][j] === '■' || buscaminas.tableroVisible[i][j] === '🏴')
+					buscaminas.tableroPulsadas[i][j] === "🞫" &&
+					(buscaminas.tableroVisible[i][j] === "■" || buscaminas.tableroVisible[i][j] === "🏴")
 				) {
 					buscaminas.tableroVisible[i][j] = buscaminas.tableroLogica[i][j];
 				}
@@ -279,13 +283,13 @@ export let buscaminas = {
 	 */
 	marcar(x, y) {
 		if (
-			buscaminas.tableroPulsadas[x][y] !== '🞫' &&
-			buscaminas.tableroVisible[x][y] !== '🏴' &&
+			buscaminas.tableroPulsadas[x][y] !== "🞫" &&
+			buscaminas.tableroVisible[x][y] !== "🏴" &&
 			!buscaminas.flagGanar &&
 			!buscaminas.flagPerder
 		) {
 			if (buscaminas.banderas > 0) {
-				buscaminas.tableroVisible[x][y] = '🏴';
+				buscaminas.tableroVisible[x][y] = "🏴";
 				buscaminas.banderas--;
 				console.clear();
 				console.log('Tablero de lógica:\n');
@@ -296,8 +300,8 @@ export let buscaminas = {
 				console.table(buscaminas.tableroPulsadas);
 				console.log(buscaminas.banderas);
 			}
-		} else if (buscaminas.tableroPulsadas[x][y] !== '🞫' && buscaminas.tableroVisible[x][y] === '🏴') {
-			buscaminas.tableroVisible[x][y] = '■';
+		} else if (buscaminas.tableroPulsadas[x][y] !== "🞫" && buscaminas.tableroVisible[x][y] === "🏴") {
+			buscaminas.tableroVisible[x][y] = "■";
 			buscaminas.banderas++;
 
 			console.clear();
@@ -330,50 +334,50 @@ export let buscaminas = {
 		if (buscaminas.obtenerBanderasAlrededor(x, y) === buscaminas.tableroLogica[x][y]) {
 			if (x > 0 && y > 0) {
 				if (
-					buscaminas.tableroVisible[x - 1][y - 1] !== '🏴' &&
-					buscaminas.tableroPulsadas[x - 1][y - 1] !== '🞫'
+					buscaminas.tableroVisible[x - 1][y - 1] !== "🏴" &&
+					buscaminas.tableroPulsadas[x - 1][y - 1] !== "🞫"
 				) {
 					buscaminas.picar(x - 1, y - 1);
 				}
 			}
 
 			if (y > 0) {
-				if (buscaminas.tableroVisible[x][y - 1] !== '🏴' && buscaminas.tableroPulsadas[x][y - 1] !== '🞫') {
+				if (buscaminas.tableroVisible[x][y - 1] !== "🏴" && buscaminas.tableroPulsadas[x][y - 1] !== "🞫") {
 					buscaminas.picar(x, y - 1);
 				}
 			}
 
 			if (y > 0 && x < buscaminas.filas - 1) {
 				if (
-					buscaminas.tableroVisible[x + 1][y - 1] !== '🏴' &&
-					buscaminas.tableroPulsadas[x + 1][y - 1] !== '🞫'
+					buscaminas.tableroVisible[x + 1][y - 1] !== "🏴" &&
+					buscaminas.tableroPulsadas[x + 1][y - 1] !== "🞫"
 				) {
 					buscaminas.picar(x + 1, y - 1);
 				}
 			}
 
 			if (x > 0) {
-				if (buscaminas.tableroVisible[x - 1][y] !== '🏴' && buscaminas.tableroPulsadas[x - 1][y] !== '🞫') {
+				if (buscaminas.tableroVisible[x - 1][y] !== "🏴" && buscaminas.tableroPulsadas[x - 1][y] !== "🞫") {
 					buscaminas.picar(x - 1, y);
 				}
 			}
 
 			if (x < buscaminas.filas - 1) {
-				if (buscaminas.tableroVisible[x + 1][y] !== '🏴' && buscaminas.tableroPulsadas[x + 1][y] !== '🞫') {
+				if (buscaminas.tableroVisible[x + 1][y] !== "🏴" && buscaminas.tableroPulsadas[x + 1][y] !== "🞫") {
 					buscaminas.picar(x + 1, y);
 				}
 			}
 
 			if (y < buscaminas.columnas - 1) {
-				if (buscaminas.tableroVisible[x][y + 1] !== '🏴' && buscaminas.tableroPulsadas[x][y + 1] !== '🞫') {
+				if (buscaminas.tableroVisible[x][y + 1] !== "🏴" && buscaminas.tableroPulsadas[x][y + 1] !== "🞫") {
 					buscaminas.picar(x, y + 1);
 				}
 			}
 
 			if (x < buscaminas.filas - 1 && y < buscaminas.columnas - 1) {
 				if (
-					buscaminas.tableroVisible[x + 1][y + 1] !== '🏴' &&
-					buscaminas.tableroPulsadas[x + 1][y + 1] !== '🞫'
+					buscaminas.tableroVisible[x + 1][y + 1] !== "🏴" &&
+					buscaminas.tableroPulsadas[x + 1][y + 1] !== "🞫"
 				) {
 					buscaminas.picar(x + 1, y + 1);
 				}
@@ -381,8 +385,8 @@ export let buscaminas = {
 
 			if (x > 0 && y < buscaminas.columnas - 1) {
 				if (
-					buscaminas.tableroVisible[x - 1][y + 1] !== '🏴' &&
-					buscaminas.tableroPulsadas[x - 1][y + 1] !== '🞫'
+					buscaminas.tableroVisible[x - 1][y + 1] !== "🏴" &&
+					buscaminas.tableroPulsadas[x - 1][y + 1] !== "🞫"
 				) {
 					buscaminas.picar(x - 1, y + 1);
 				}
@@ -392,52 +396,52 @@ export let buscaminas = {
 			buscaminas.guardarSeleccionContiguas.clear();
 			if (x > 0 && y > 0) {
 				if (
-					buscaminas.tableroVisible[x - 1][y - 1] !== '🏴' &&
-					buscaminas.tableroPulsadas[x - 1][y - 1] !== '🞫'
+					buscaminas.tableroVisible[x - 1][y - 1] !== "🏴" &&
+					buscaminas.tableroPulsadas[x - 1][y - 1] !== "🞫"
 				) {
 					buscaminas.guardarSeleccionContiguas.add(x - 1 + '-' + (y - 1));
 				}
 			}
 			if (y > 0) {
-				if (buscaminas.tableroVisible[x][y - 1] !== '🏴' && buscaminas.tableroPulsadas[x][y - 1] !== '🞫') {
+				if (buscaminas.tableroVisible[x][y - 1] !== "🏴" && buscaminas.tableroPulsadas[x][y - 1] !== "🞫") {
 					buscaminas.guardarSeleccionContiguas.add(x + '-' + (y - 1));
 				}
 			}
 			if (y > 0 && x < buscaminas.filas - 1) {
 				if (
-					buscaminas.tableroVisible[x + 1][y - 1] !== '🏴' &&
-					buscaminas.tableroPulsadas[x + 1][y - 1] !== '🞫'
+					buscaminas.tableroVisible[x + 1][y - 1] !== "🏴" &&
+					buscaminas.tableroPulsadas[x + 1][y - 1] !== "🞫"
 				) {
 					buscaminas.guardarSeleccionContiguas.add(x + 1 + '-' + (y - 1));
 				}
 			}
 			if (x > 0) {
-				if (buscaminas.tableroVisible[x - 1][y] !== '🏴' && buscaminas.tableroPulsadas[x - 1][y] !== '🞫') {
+				if (buscaminas.tableroVisible[x - 1][y] !== "🏴" && buscaminas.tableroPulsadas[x - 1][y] !== "🞫") {
 					buscaminas.guardarSeleccionContiguas.add(x - 1 + '-' + y);
 				}
 			}
 			if (x < buscaminas.filas - 1) {
-				if (buscaminas.tableroVisible[x + 1][y] !== '🏴' && buscaminas.tableroPulsadas[x + 1][y] !== '🞫') {
+				if (buscaminas.tableroVisible[x + 1][y] !== "🏴" && buscaminas.tableroPulsadas[x + 1][y] !== "🞫") {
 					buscaminas.guardarSeleccionContiguas.add(x + 1 + '-' + y);
 				}
 			}
 			if (y < buscaminas.columnas - 1) {
-				if (buscaminas.tableroVisible[x][y + 1] !== '🏴' && buscaminas.tableroPulsadas[x][y + 1] !== '🞫') {
+				if (buscaminas.tableroVisible[x][y + 1] !== "🏴" && buscaminas.tableroPulsadas[x][y + 1] !== "🞫") {
 					buscaminas.guardarSeleccionContiguas.add(x + '-' + (y + 1));
 				}
 			}
 			if (x < buscaminas.filas - 1 && y < buscaminas.columnas - 1) {
 				if (
-					buscaminas.tableroVisible[x + 1][y + 1] !== '🏴' &&
-					buscaminas.tableroPulsadas[x + 1][y + 1] !== '🞫'
+					buscaminas.tableroVisible[x + 1][y + 1] !== "🏴" &&
+					buscaminas.tableroPulsadas[x + 1][y + 1] !== "🞫"
 				) {
 					buscaminas.guardarSeleccionContiguas.add(x + 1 + '-' + (y + 1));
 				}
 			}
 			if (x > 0 && y < buscaminas.columnas - 1) {
 				if (
-					buscaminas.tableroVisible[x - 1][y + 1] !== '🏴' &&
-					buscaminas.tableroPulsadas[x - 1][y + 1] !== '🞫'
+					buscaminas.tableroVisible[x - 1][y + 1] !== "🏴" &&
+					buscaminas.tableroPulsadas[x - 1][y + 1] !== "🞫"
 				) {
 					buscaminas.guardarSeleccionContiguas.add(x - 1 + '-' + (y + 1));
 				}
@@ -452,51 +456,51 @@ export let buscaminas = {
 	 */
 	obtenerBanderasAlrededor(x, y) {
 		let totalBanderas = 0;
-		if (buscaminas.tableroPulsadas[x][y] === '🞫') {
+		if (buscaminas.tableroPulsadas[x][y] === "🞫") {
 			if (x > 0 && y > 0) {
-				if (buscaminas.tableroVisible[x - 1][y - 1] === '🏴') {
+				if (buscaminas.tableroVisible[x - 1][y - 1] === "🏴") {
 					totalBanderas++;
 				}
 			}
 
 			if (y > 0) {
-				if (buscaminas.tableroVisible[x][y - 1] === '🏴') {
+				if (buscaminas.tableroVisible[x][y - 1] === "🏴") {
 					totalBanderas++;
 				}
 			}
 
 			if (y > 0 && x < buscaminas.filas - 1) {
-				if (buscaminas.tableroVisible[x + 1][y + 1] === '🏴') {
+				if (buscaminas.tableroVisible[x + 1][y - 1] === "🏴") {
 					totalBanderas++;
 				}
 			}
 
 			if (x > 0) {
-				if (buscaminas.tableroVisible[x - 1][y] === '🏴') {
+				if (buscaminas.tableroVisible[x - 1][y] === "🏴") {
 					totalBanderas++;
 				}
 			}
 
 			if (x < buscaminas.filas - 1) {
-				if (buscaminas.tableroVisible[x + 1][y] === '🏴') {
+				if (buscaminas.tableroVisible[x + 1][y] === "🏴") {
 					totalBanderas++;
 				}
 			}
 
 			if (y < buscaminas.columnas - 1) {
-				if (buscaminas.tableroVisible[x][y + 1] === '🏴') {
+				if (buscaminas.tableroVisible[x][y + 1] === "🏴") {
 					totalBanderas++;
 				}
 			}
 
 			if (x < buscaminas.filas - 1 && y < buscaminas.columnas - 1) {
-				if (buscaminas.tableroVisible[x + 1][y + 1] === '🏴') {
+				if (buscaminas.tableroVisible[x + 1][y + 1] === "🏴") {
 					totalBanderas++;
 				}
 			}
 
 			if (x > 0 && buscaminas.columnas - 1) {
-				if (buscaminas.tableroVisible[x - 1][y + 1] === '🏴') {
+				if (buscaminas.tableroVisible[x - 1][y + 1] === "🏴") {
 					totalBanderas++;
 				}
 			}
@@ -522,7 +526,7 @@ export let buscaminas = {
 		let contador = 0;
 		for (let i = 0; i < buscaminas.filas; i++) {
 			for (let j = 0; j < buscaminas.columnas; j++) {
-				if (buscaminas.tableroPulsadas[i][j] === '🞫') {
+				if (buscaminas.tableroPulsadas[i][j] === "🞫") {
 					contador++;
 				}
 			}
@@ -537,7 +541,7 @@ export let buscaminas = {
 		let contador = 0;
 		for (let i = 0; i < buscaminas.filas; i++) {
 			for (let j = 0; j < buscaminas.columnas; j++) {
-				if (buscaminas.tableroLogica[i][j] !== '💣') {
+				if (buscaminas.tableroLogica[i][j] !== "💣") {
 					contador++;
 				}
 			}
@@ -552,7 +556,7 @@ export let buscaminas = {
 		let banderas = 0;
 		for (let i = 0; i < buscaminas.filas; i++) {
 			for (let j = 0; j < buscaminas.columnas; j++) {
-				if (buscaminas.tableroVisible[i][j] === '🏴') {
+				if (buscaminas.tableroVisible[i][j] === "🏴") {
 					banderas++;
 				}
 			}
@@ -569,14 +573,14 @@ export let buscaminas = {
 		let casillasParaGanar = 0;
 		for (let i = 0; i < buscaminas.filas; i++) {
 			for (let j = 0; j < buscaminas.columnas; j++) {
-				if (buscaminas.tableroPulsadas[i][j] === '🞫') {
+				if (buscaminas.tableroPulsadas[i][j] === "🞫") {
 					casillasYaPulsadas++;
 				}
-				if (buscaminas.tableroPulsadas[i][j] !== '🞫') {
+				if (buscaminas.tableroPulsadas[i][j] !== "🞫") {
 					casillasNoPulsadas++;
 					if (
 						casillasNoPulsadas === buscaminas.minas &&
-						(buscaminas.tableroLogica[i][j] === '💣' && buscaminas.tableroVisible[i][j] === '🏴')
+						(buscaminas.tableroLogica[i][j] === "💣" && buscaminas.tableroVisible[i][j] === "🏴")
 					) {
 						casillasParaGanar++;
 					}
@@ -590,7 +594,7 @@ export let buscaminas = {
 	eliminarBanderas() {
 		for (let i = 0; i < buscaminas.filas; i++) {
 			for (let j = 0; j < buscaminas.columnas; j++) {
-				if (buscaminas.tableroVisible[i][j] === '🏴') {
+				if (buscaminas.tableroVisible[i][j] === "🏴") {
 					buscaminas.guardarCoordenadasBanderas.add(i + '-' + j);
 				}
 			}
