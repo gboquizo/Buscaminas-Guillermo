@@ -596,9 +596,16 @@ let buscaminasGUI = {
                 <meta name="author" content="Guillermo Boquizo Sánchez">
                 <meta name="description" content="Instrucciones de juego del buscaminas">
 				<meta name="keywords" content="HTML,CSS,JavaScript, jQuery, help">
-				<title>Instrucciones de juego</title>
-				<link rel="shortcut icon" href="images/favicon.ico">
-                <link rel="stylesheet" type="text/css" media="screen" href="css/estilos-instrucciones.min.css">
+				<title>Instrucciones</title></title>
+				<script type="text/javascript" src="js/close.js" charset="UTF-8"></script>
+				<link rel="stylesheet" type="text/css" media="screen" href="css/estilos-instrucciones.min.css">
+				<link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png">
+				<link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png">
+				<link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png">
+				<link rel="manifest" href="icon/site.webmanifest">
+				<link rel="mask-icon" href="icon/safari-pinned-tab.svg" color="#5bbad5">
+				<meta name="msapplication-TileColor" content="#da532c">
+				<meta name="theme-color" content="#ffffff">
             </head>
             <body>
                 <noscript>
@@ -657,16 +664,20 @@ let buscaminasGUI = {
 						<p class="description">Si desea reproducir música durante su partida, pulse el icono de la seta verde.</p>
 						<p class="description">Si desea detener la música durante su partida, pulse el icono de la seta roja.</p>
 					</article>
+					<button class="instructionsCloseButton" id ="instructionsClose"> Cerrar ventana </button>
 				</section>
+				
 				</main>
             </body>
             </html>
-        `
-		let instructionsWindow = window.open("", "", "width=900px,height=900px");
+		`
+		let params = `scrollbars=yes,resizable=no,status=yes,location=yes,toolbar=yes,menubar=yes,width=650,height=800, left=1000,top=0`;
+		let instructionsWindow = window.open("", "Instrucciones de juego", params);
 		instructionsWindow.document.open();
 		instructionsWindow.document.write(html);
 		instructionsWindow.document.close();
 	},
+
 };
 
 $(init);
