@@ -228,7 +228,10 @@ let buscaminasGUI = {
 				}
 				buscaminasGUI.levelStyles('uncover-tile', $element, 'delay-' + counterDelay + 's');
 			}
-			buscaminasGUI.playAudio('abrir.mp3');
+			if (counterDelay === 1) {
+				buscaminasGUI.playAudio('abrir.mp3');
+			}
+
 		}
 		buscaminas.guardarAperturaCasillas.clear();
 	},
