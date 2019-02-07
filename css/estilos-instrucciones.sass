@@ -1,0 +1,85 @@
+=flex-center($direction)
+    display: flex
+    flex-direction: $direction
+    justify-content: center
+    align-items: center
+
+$primary-color: #3F51B5
+$dark-primary-color: #303F9F
+$accent-color: #FF5722
+$light-primary-color: #C5CAE9
+$primary-text-color: #212121
+$secondary-text-color: #757575
+$divider-color: #BDBDBD
+$white-color: #fff
+
+body
+    margin: 0px
+    padding: 0px
+    -webkit-user-select: none
+    -moz-user-select: none
+    -ms-user-select: none
+    user-select: none
+    main
+        +flex-center(column)
+        min-height: 100vh
+        width: 100%
+        background: $dark-primary-color
+        .container
+            +flex-center(column)
+            margin-top: 50px
+            margin-bottom: 50px
+            background: $primary-color
+            padding: 50px
+            color: $white-color
+            border-radius: 10px
+            min-width: 50%
+            -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.32), 0 3px 6px rgba(0, 0, 0, 0.64)
+            -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.32), 0 3px 6px rgba(0, 0, 0, 0.64)
+            -ms-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.32), 0 3px 6px rgba(0, 0, 0, 0.64)
+            -o-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.32), 0 3px 6px rgba(0, 0, 0, 0.64)
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.32), 0 3px 6px rgba(0, 0, 0, 0.64)
+            h1
+                padding-left: 10px
+                padding-right: 10px
+                margin-bottom: 20px
+                font-size: 3rem
+                color: $accent-color
+            .instruction-image
+                height: 60px
+            .instruction
+                display: flex
+                flex-direction: column
+                justify-content: flex-start
+                align-items: center
+                width: 100%
+                margin-bottom: 20px
+                .how-to
+                    +flex-center(column)
+                    margin-right: 20px
+                    border: 1px solid $divider-color
+                    padding: 10px
+                    border-radius: 2px
+                    width: 400px
+                    text-align: center
+                    img
+                        margin-bottom: 10px
+                .mushroom
+                    +flex-center(row)
+                    margin-right: 20px
+                    border: 1px solid $divider-color
+                    padding: 10px
+                    border-radius: 2px
+                    width: 400px
+                    text-align: center
+                    img
+                        margin: 10px        
+                .description
+                    background: $light-primary-color
+                    color: $primary-text-color
+                    font-weight: bold
+                    padding: 5px
+                    border-radius: 2px
+                    width: 420px
+                    text-align: center
+                    font-size: 1.1rem

@@ -3,7 +3,9 @@
  * @author Guillermo Boquizo Sánchez.
  */
 
-import { buscaminas } from './main.js';
+import {
+	buscaminas
+} from './main.js';
 
 let $containerLevelSelector;
 let $board;
@@ -14,10 +16,11 @@ let $music;
 /**
  * Carga la interfaz de juego.
  */
-let init = function() {
+let init = function () {
 	$('#seleccionNivel')[0].selectedIndex = 0;
 	$('#seleccionNivel').change(buscaminasGUI.start);
 	$('#activarMusica').click(buscaminasGUI.musicSettings);
+	$('#instructions').click(buscaminasGUI.openInstructions);
 	$containerLevelSelector = $('#containerLevelSelector');
 	$music = $('#music');
 	$clock = $('#clock');
@@ -72,10 +75,10 @@ let buscaminasGUI = {
 			for (let j = 0; j < buscaminas.columnas; j++) {
 				let $tile = $(`<input type="text" id="${i}-${j}" readonly></input>`);
 				buscaminasGUI.levelStyles('cover-tile', $tile);
-				$tile.click(function() {
+				$tile.click(function () {
 					buscaminasGUI.picarGUI($(this));
 				});
-				$tile.mousedown(function(event) {
+				$tile.mousedown(function (event) {
 					switch (event.buttons) {
 						case 2:
 							buscaminasGUI.marcarGUI($(this));
@@ -109,7 +112,7 @@ let buscaminasGUI = {
 			if (e.message === '¡¡¡ Enhorabuena, has ganado !!!') {
 				buscaminasGUI.checkRecord();
 				buscaminasGUI.levelStyles('uncover-tile', element);
-				setTimeout(function() {
+				setTimeout(function () {
 					buscaminasGUI.swalPlayAgain(e.message, 'success');
 				}, 3000);
 			} else {
@@ -144,7 +147,7 @@ let buscaminasGUI = {
 			if (e.message === "'¡¡¡ Enhorabuena, has ganado !!!'") {
 				buscaminasGUI.checkRecord();
 				buscaminasGUI.levelStyles('uncover-tile', element);
-				setTimeout(function() {
+				setTimeout(function () {
 					buscaminasGUI.swalPlayAgain(e.message, 'success');
 				}, 3000);
 			} else {
@@ -177,7 +180,7 @@ let buscaminasGUI = {
 			buscaminasGUI.uncoverMines();
 			if (e.message === '¡¡¡ Enhorabuena, has ganado !!!') {
 				buscaminasGUI.levelStyles('uncover-tile', element);
-				setTimeout(function() {
+				setTimeout(function () {
 					buscaminasGUI.swalPlayAgain(e.message, 'success');
 				}, 3000);
 			} else {
@@ -501,17 +504,17 @@ let buscaminasGUI = {
 	openMinesByLevelAnimationTime(message) {
 		switch (buscaminas.nivel) {
 			case 'fácil':
-				setTimeout(function() {
+				setTimeout(function () {
 					buscaminasGUI.swalPlayAgain(message, 'error');
 				}, 4000);
 				break;
 			case 'difícil':
-				setTimeout(function() {
+				setTimeout(function () {
 					buscaminasGUI.swalPlayAgain(message, 'error');
 				}, 6000);
 				break;
 			case 'experto':
-				setTimeout(function() {
+				setTimeout(function () {
 					buscaminasGUI.swalPlayAgain(message, 'error');
 				}, 11000);
 				break;
@@ -525,11 +528,11 @@ let buscaminasGUI = {
 	 */
 	disableContextMenu() {
 		if ($(document).on()) {
-			$(document).contextmenu(function(e) {
+			$(document).contextmenu(function (e) {
 				e.preventDefault();
 			}, false);
 		} else {
-			$(document).attachEvent('oncontextmenu', function() {
+			$(document).attachEvent('oncontextmenu', function () {
 				$(window).event.returnValue = false;
 			});
 		}
@@ -548,7 +551,7 @@ let buscaminasGUI = {
 	 * Muestra el tablero interno.
 	 */
 	showBoard() {
-		let mostrarTablero = (function() {
+		let mostrarTablero = (function () {
 			return {
 				mostrar: () => buscaminas.mostrar()
 			};
@@ -577,7 +580,93 @@ let buscaminasGUI = {
 	 */
 	stopMusic() {
 		$music.html('<audio controls muted></audio>');
-	}
+	},
+
+	/**
+	 * Permite mostrar las instrucciones del juego.
+	 */
+	openInstructions() {
+		let html = `
+        <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="author" content="Guillermo Boquizo Sánchez">
+                <meta name="description" content="Instrucciones de juego del buscaminas">
+				<meta name="keywords" content="HTML,CSS,JavaScript, jQuery, help">
+				<title>Instrucciones de juego</title>
+				<link rel="shortcut icon" href="images/favicon.ico">
+                <link rel="stylesheet" type="text/css" media="screen" href="css/estilos-instrucciones.min.css">
+            </head>
+            <body>
+                <noscript>
+                    <p>Por favor, comprueba que tu navegador es compatible con javascript, o bien
+                    comprueba si lo tienes activado</p>
+				</noscript>
+				<main>
+				<section class="container">
+					<h1>Instrucciones de juego</h1>
+					<article class="instruction">
+						<p class="how-to">
+						<img class="instruction-image" src="images/bloque-hover.svg" />
+						Haciendo click izquierdo.
+						</p>
+						<p class="description">Se abren las casillas pulsando con el click izquierdo del ratón.</p>
+					</article>
+					<article class="instruction">
+						<p class="how-to">
+						<img class="instruction-image" src="images/bandera.svg" />
+						Haciendo click derecho.
+						</p>
+						<p class="description">Se pone o quita una bandera en las casillas pulsando con el click derecho del ratón.</p>
+					</article>
+					<article class="instruction">
+						<p class="how-to">
+						<img class="instruction-image" src="images/sinbloque.svg" />
+						Haciendo click izquierdo y derecho.
+						</p>
+						<p class="description">Advierte con una animación las casillas contiguas a una casilla abierta que pueden contener minas.</p><br/>
+						<p class="description">Se comprueba, si se colocan, el número de banderas que hay alrededor.</p><br/>
+						<p class="description">Si coincide con el valor de la casilla abre las contiguas.</p><br/>
+						<p class="description">Si no coincide no despeja y si coincide pero erróneamente detona una bomba.</p><br/>
+					</article>
+					<article class="instruction">
+						<p class="how-to">
+						<img class="instruction-image" src="images/estrella.svg" />
+						Condiciones de victoria.
+						</p>
+						<p class="description">Se gana si el número de casillas cubiertas coincide con el total de minas.</p>
+					</article>
+					<article class="instruction">
+						<p class="how-to">
+						<img class="instruction-image" src="images/mina.svg" />
+						Condiciones de derrota.
+						</p>
+						<p class="description">Se pierde si se abre una casilla con mina, bien pulsando bien despejando en fallo al asignar banderas.</p>
+					</article>
+					<article class="instruction">
+						<p class="mushroom">
+						
+							<img class="instruction-image" src="images/play.svg" />
+							<img class="instruction-image" src="images/stop.svg" />
+						
+						Configuración de la música (opcional).
+						</p>
+						<p class="description">Si desea reproducir música durante su partida, pulse el icono de la seta verde.</p>
+						<p class="description">Si desea detener la música durante su partida, pulse el icono de la seta roja.</p>
+					</article>
+				</section>
+				</main>
+            </body>
+            </html>
+        `
+		let instructionsWindow = window.open("", "", "width=900px,height=900px");
+		instructionsWindow.document.open();
+		instructionsWindow.document.write(html);
+		instructionsWindow.document.close();
+	},
 };
 
 $(init);
