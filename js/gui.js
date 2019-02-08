@@ -600,6 +600,7 @@ let buscaminasGUI = {
                 <meta name="description" content="Instrucciones de juego del buscaminas">
 				<meta name="keywords" content="HTML,CSS,JavaScript, jQuery, help">
 				<title>Instrucciones</title></title>
+				<script src="js/jquery-3.3.1.min.js"></script>
 				<script type="text/javascript" src="js/close.js" charset="UTF-8"></script>
 				<link rel="stylesheet" type="text/css" media="screen" href="css/estilos-instrucciones.min.css">
 				<link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png">
