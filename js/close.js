@@ -1,5 +1,5 @@
 {
-	let closeInstructions = function() {
+	let closeInstructions = function () {
 		$('#instructionsClose').click(() => window.close());
 	};
 	$(closeInstructions);

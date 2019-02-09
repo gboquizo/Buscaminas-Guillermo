@@ -330,121 +330,62 @@ export let buscaminas = {
 		if (x > buscaminas.filas || y > buscaminas.columnas) {
 			throw new Error('Coordenadas inválidas.');
 		}
-
 		if (buscaminas.obtenerBanderasAlrededor(x, y) === buscaminas.tableroLogica[x][y]) {
-			if (x > 0 && y > 0) {
-				if (
-					buscaminas.tableroVisible[x - 1][y - 1] !== "🏴" &&
-					buscaminas.tableroPulsadas[x - 1][y - 1] !== "🞫"
-				) {
-					buscaminas.picar(x - 1, y - 1);
-				}
+			if ((x > 0 && y > 0) && (buscaminas.tableroVisible[x - 1][y - 1] !== "🏴" && buscaminas.tableroPulsadas[x - 1][y - 1] !== "🞫")) {
+				buscaminas.picar(x - 1, y - 1);
 			}
-
-			if (y > 0) {
-				if (buscaminas.tableroVisible[x][y - 1] !== "🏴" && buscaminas.tableroPulsadas[x][y - 1] !== "🞫") {
-					buscaminas.picar(x, y - 1);
-				}
+			if ((y > 0) && (buscaminas.tableroVisible[x][y - 1] !== "🏴" && buscaminas.tableroPulsadas[x][y - 1] !== "🞫")) {
+				buscaminas.picar(x, y - 1);
 			}
-
-			if (y > 0 && x < buscaminas.filas - 1) {
-				if (
-					buscaminas.tableroVisible[x + 1][y - 1] !== "🏴" &&
-					buscaminas.tableroPulsadas[x + 1][y - 1] !== "🞫"
-				) {
-					buscaminas.picar(x + 1, y - 1);
-				}
+			if ((y > 0 && x < buscaminas.filas - 1) && (buscaminas.tableroVisible[x + 1][y - 1] !== "🏴" &&
+					buscaminas.tableroPulsadas[x + 1][y - 1] !== "🞫")) {
+				buscaminas.picar(x + 1, y - 1);
 			}
-
-			if (x > 0) {
-				if (buscaminas.tableroVisible[x - 1][y] !== "🏴" && buscaminas.tableroPulsadas[x - 1][y] !== "🞫") {
-					buscaminas.picar(x - 1, y);
-				}
+			if ((x > 0) && (buscaminas.tableroVisible[x - 1][y] !== "🏴" && buscaminas.tableroPulsadas[x - 1][y] !== "🞫")) {
+				buscaminas.picar(x - 1, y);
 			}
-
-			if (x < buscaminas.filas - 1) {
-				if (buscaminas.tableroVisible[x + 1][y] !== "🏴" && buscaminas.tableroPulsadas[x + 1][y] !== "🞫") {
-					buscaminas.picar(x + 1, y);
-				}
+			if ((x < buscaminas.filas - 1) && (buscaminas.tableroVisible[x + 1][y] !== "🏴" && buscaminas.tableroPulsadas[x + 1][y] !== "🞫")) {
+				buscaminas.picar(x + 1, y);
 			}
-
-			if (y < buscaminas.columnas - 1) {
-				if (buscaminas.tableroVisible[x][y + 1] !== "🏴" && buscaminas.tableroPulsadas[x][y + 1] !== "🞫") {
-					buscaminas.picar(x, y + 1);
-				}
+			if ((y < buscaminas.columnas - 1) && (buscaminas.tableroVisible[x][y + 1] !== "🏴" && buscaminas.tableroPulsadas[x][y + 1] !== "🞫")) {
+				buscaminas.picar(x, y + 1);
 			}
-
-			if (x < buscaminas.filas - 1 && y < buscaminas.columnas - 1) {
-				if (
-					buscaminas.tableroVisible[x + 1][y + 1] !== "🏴" &&
-					buscaminas.tableroPulsadas[x + 1][y + 1] !== "🞫"
-				) {
-					buscaminas.picar(x + 1, y + 1);
-				}
+			if ((x < buscaminas.filas - 1 && y < buscaminas.columnas - 1) && (buscaminas.tableroVisible[x + 1][y + 1] !== "🏴" &&
+					buscaminas.tableroPulsadas[x + 1][y + 1] !== "🞫")) {
+				buscaminas.picar(x + 1, y + 1);
 			}
-
-			if (x > 0 && y < buscaminas.columnas - 1) {
-				if (
-					buscaminas.tableroVisible[x - 1][y + 1] !== "🏴" &&
-					buscaminas.tableroPulsadas[x - 1][y + 1] !== "🞫"
-				) {
-					buscaminas.picar(x - 1, y + 1);
-				}
+			if ((x > 0 && y < buscaminas.columnas - 1) && (buscaminas.tableroVisible[x - 1][y + 1] !== "🏴" &&
+					buscaminas.tableroPulsadas[x - 1][y + 1] !== "🞫")) {
+				buscaminas.picar(x - 1, y + 1);
 			}
-
 		} else {
 			buscaminas.guardarSeleccionContiguas.clear();
-			if (x > 0 && y > 0) {
-				if (
-					buscaminas.tableroVisible[x - 1][y - 1] !== "🏴" &&
-					buscaminas.tableroPulsadas[x - 1][y - 1] !== "🞫"
-				) {
-					buscaminas.guardarSeleccionContiguas.add(x - 1 + '-' + (y - 1));
-				}
+			if ((x > 0 && y > 0) && (buscaminas.tableroVisible[x - 1][y - 1] !== "🏴" && buscaminas.tableroPulsadas[x - 1][y - 1] !== "🞫")) {
+				buscaminas.guardarSeleccionContiguas.add(x - 1 + '-' + (y - 1));
 			}
-			if (y > 0) {
-				if (buscaminas.tableroVisible[x][y - 1] !== "🏴" && buscaminas.tableroPulsadas[x][y - 1] !== "🞫") {
-					buscaminas.guardarSeleccionContiguas.add(x + '-' + (y - 1));
-				}
+			if ((y > 0) && (buscaminas.tableroVisible[x][y - 1] !== "🏴" && buscaminas.tableroPulsadas[x][y - 1] !== "🞫")) {
+				buscaminas.guardarSeleccionContiguas.add(x + '-' + (y - 1));
 			}
-			if (y > 0 && x < buscaminas.filas - 1) {
-				if (
-					buscaminas.tableroVisible[x + 1][y - 1] !== "🏴" &&
-					buscaminas.tableroPulsadas[x + 1][y - 1] !== "🞫"
-				) {
-					buscaminas.guardarSeleccionContiguas.add(x + 1 + '-' + (y - 1));
-				}
+			if ((y > 0 && x < buscaminas.filas - 1) && (buscaminas.tableroVisible[x + 1][y - 1] !== "🏴" &&
+					buscaminas.tableroPulsadas[x + 1][y - 1] !== "🞫")) {
+				buscaminas.guardarSeleccionContiguas.add(x + 1 + '-' + (y - 1));
 			}
-			if (x > 0) {
-				if (buscaminas.tableroVisible[x - 1][y] !== "🏴" && buscaminas.tableroPulsadas[x - 1][y] !== "🞫") {
-					buscaminas.guardarSeleccionContiguas.add(x - 1 + '-' + y);
-				}
+			if ((x > 0) && (buscaminas.tableroVisible[x - 1][y] !== "🏴" && buscaminas.tableroPulsadas[x - 1][y] !== "🞫")) {
+				buscaminas.guardarSeleccionContiguas.add(x - 1 + '-' + y);
 			}
-			if (x < buscaminas.filas - 1) {
-				if (buscaminas.tableroVisible[x + 1][y] !== "🏴" && buscaminas.tableroPulsadas[x + 1][y] !== "🞫") {
-					buscaminas.guardarSeleccionContiguas.add(x + 1 + '-' + y);
-				}
+			if ((x < buscaminas.filas - 1) && (buscaminas.tableroVisible[x + 1][y] !== "🏴" && buscaminas.tableroPulsadas[x + 1][y] !== "🞫")) {
+				buscaminas.guardarSeleccionContiguas.add(x + 1 + '-' + y);
 			}
-			if (y < buscaminas.columnas - 1) {
-				if (buscaminas.tableroVisible[x][y + 1] !== "🏴" && buscaminas.tableroPulsadas[x][y + 1] !== "🞫") {
-					buscaminas.guardarSeleccionContiguas.add(x + '-' + (y + 1));
-				}
+			if ((y < buscaminas.columnas - 1) && (buscaminas.tableroVisible[x][y + 1] !== "🏴" && buscaminas.tableroPulsadas[x][y + 1] !== "🞫")) {
+				buscaminas.guardarSeleccionContiguas.add(x + '-' + (y + 1));
 			}
-			if (x < buscaminas.filas - 1 && y < buscaminas.columnas - 1) {
-				if (
-					buscaminas.tableroVisible[x + 1][y + 1] !== "🏴" &&
-					buscaminas.tableroPulsadas[x + 1][y + 1] !== "🞫"
-				) {
-					buscaminas.guardarSeleccionContiguas.add(x + 1 + '-' + (y + 1));
-				}
+			if ((x < buscaminas.filas - 1 && y < buscaminas.columnas - 1) && (buscaminas.tableroVisible[x + 1][y + 1] !== "🏴" &&
+					buscaminas.tableroPulsadas[x + 1][y + 1] !== "🞫")) {
+				buscaminas.guardarSeleccionContiguas.add(x + 1 + '-' + (y + 1));
 			}
-			if (x > 0 && y < buscaminas.columnas - 1) {
-				if (
-					buscaminas.tableroVisible[x - 1][y + 1] !== "🏴" &&
-					buscaminas.tableroPulsadas[x - 1][y + 1] !== "🞫"
-				) {
-					buscaminas.guardarSeleccionContiguas.add(x - 1 + '-' + (y + 1));
-				}
+			if ((x > 0 && y < buscaminas.columnas - 1) && (buscaminas.tableroVisible[x - 1][y + 1] !== "🏴" &&
+					buscaminas.tableroPulsadas[x - 1][y + 1] !== "🞫")) {
+				buscaminas.guardarSeleccionContiguas.add(x - 1 + '-' + (y + 1));
 			}
 		}
 	},
@@ -457,52 +398,36 @@ export let buscaminas = {
 	obtenerBanderasAlrededor(x, y) {
 		let totalBanderas = 0;
 		if (buscaminas.tableroPulsadas[x][y] === "🞫") {
-			if (x > 0 && y > 0) {
-				if (buscaminas.tableroVisible[x - 1][y - 1] === "🏴") {
-					totalBanderas++;
-				}
+			if ((x > 0 && y > 0) && (buscaminas.tableroVisible[x - 1][y - 1] === "🏴")) {
+				totalBanderas++;
 			}
 
-			if (y > 0) {
-				if (buscaminas.tableroVisible[x][y - 1] === "🏴") {
-					totalBanderas++;
-				}
+			if ((y > 0) && (buscaminas.tableroVisible[x][y - 1] === "🏴")) {
+				totalBanderas++;
 			}
 
-			if (y > 0 && x < buscaminas.filas - 1) {
-				if (buscaminas.tableroVisible[x + 1][y - 1] === "🏴") {
-					totalBanderas++;
-				}
+			if ((y > 0 && x < buscaminas.filas - 1) && (buscaminas.tableroVisible[x + 1][y - 1] === "🏴")) {
+				totalBanderas++;
 			}
 
-			if (x > 0) {
-				if (buscaminas.tableroVisible[x - 1][y] === "🏴") {
-					totalBanderas++;
-				}
+			if ((x > 0) && (buscaminas.tableroVisible[x - 1][y] === "🏴")) {
+				totalBanderas++;
 			}
 
-			if (x < buscaminas.filas - 1) {
-				if (buscaminas.tableroVisible[x + 1][y] === "🏴") {
-					totalBanderas++;
-				}
+			if ((x < buscaminas.filas - 1) && (buscaminas.tableroVisible[x + 1][y] === "🏴")) {
+				totalBanderas++;
 			}
 
-			if (y < buscaminas.columnas - 1) {
-				if (buscaminas.tableroVisible[x][y + 1] === "🏴") {
-					totalBanderas++;
-				}
+			if ((y < buscaminas.columnas - 1) && (buscaminas.tableroVisible[x][y + 1] === "🏴")) {
+				totalBanderas++;
 			}
 
-			if (x < buscaminas.filas - 1 && y < buscaminas.columnas - 1) {
-				if (buscaminas.tableroVisible[x + 1][y + 1] === "🏴") {
-					totalBanderas++;
-				}
+			if ((x < buscaminas.filas - 1 && y < buscaminas.columnas - 1) && (buscaminas.tableroVisible[x + 1][y + 1] === "🏴")) {
+				totalBanderas++;
 			}
 
-			if (x > 0 && buscaminas.columnas - 1) {
-				if (buscaminas.tableroVisible[x - 1][y + 1] === "🏴") {
-					totalBanderas++;
-				}
+			if ((x > 0 && buscaminas.columnas - 1) && (buscaminas.tableroVisible[x - 1][y + 1] === "🏴")) {
+				totalBanderas++;
 			}
 		}
 		return totalBanderas;
