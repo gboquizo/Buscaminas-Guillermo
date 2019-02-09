@@ -47,7 +47,8 @@ body main .container {
   padding: 50px;
   color: #fff;
   border-radius: 10px;
-  min-width: 50%;
+  min-width: 40%;
+  width: 70%;
   -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.32), 0 3px 6px rgba(0, 0, 0, 0.64);
   -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.32), 0 3px 6px rgba(0, 0, 0, 0.64);
   -ms-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.32), 0 3px 6px rgba(0, 0, 0, 0.64);
@@ -72,7 +73,7 @@ body main .container .instruction {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: 100%;
+  width: 70%;
   margin-bottom: 20px;
 }
 
@@ -116,7 +117,7 @@ body main .container .instruction .description {
   font-weight: bold;
   padding: 5px;
   border-radius: 2px;
-  width: 420px;
+  width: 400px;
   text-align: center;
   font-size: 1.1rem;
 }

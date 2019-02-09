@@ -513,6 +513,8 @@ export let buscaminas = {
 			}
 		}
 		if (casillasYaPulsadas > 1 && casillasParaGanar === buscaminas.minas) {
+			buscaminas.flagGanar = true;
+			buscaminas.eliminarBanderas();
 			throw new Error('Has ganado la partida');
 		}
 	},

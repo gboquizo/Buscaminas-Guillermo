@@ -179,6 +179,7 @@ let buscaminasGUI = {
 		} catch (e) {
 			buscaminasGUI.uncoverMines();
 			if (e.message === '¡¡¡ Enhorabuena, has ganado !!!') {
+				buscaminasGUI.checkRecord();
 				buscaminasGUI.levelStyles('uncover-tile', element);
 				setTimeout(function () {
 					buscaminasGUI.swalPlayAgain(e.message, 'success');
@@ -675,7 +676,7 @@ let buscaminasGUI = {
             </body>
             </html>
 		`
-		let params = `scrollbars=yes,resizable=no,status=yes,location=yes,toolbar=yes,menubar=yes,width=650,height=800, left=1000,top=0`;
+		let params = `scrollbars=yes,resizable=no,status=yes,location=yes,toolbar=yes,menubar=yes,width=700,height=800, left=1000,top=0`;
 		let instructionsWindow = window.open("", "Instrucciones de juego", params);
 		instructionsWindow.document.open();
 		instructionsWindow.document.write(html);
