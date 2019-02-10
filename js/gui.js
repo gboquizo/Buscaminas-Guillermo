@@ -211,9 +211,7 @@ let buscaminasGUI = {
 			buscaminasGUI.uncoverMines();
 			return;
 		}
-
 		let counterDelay = 100;
-
 		for (const item of buscaminas.guardarAperturaCasillas) {
 			counterDelay += 80;
 			let fila = parseInt(item.split('-')[0]);
@@ -241,7 +239,6 @@ let buscaminasGUI = {
 	 * @param level nivel actual de la partida.
 	 * @param effect efecto que se le añadirá a los input.
 	 * @param delay tiempo de duración de la animación.
-	
 	 */
 	animationInput(input, targetClass, level, effect, delay) {
 		if (targetClass === 'cover-tile') {
@@ -258,6 +255,8 @@ let buscaminasGUI = {
 	 * Establece una serie de clases CSS según el nivel.
 	 * @param classs clase que se añadirá al input.
 	 * @param input elemento al que se le añade la clase
+	 * @param delay tiempo de duración de la animación
+	 * @param effect efecto a aplicar
 	 */
 	levelStyles(classs, input, delay = "100", effect = 'fade') {
 		switch (buscaminas.nivel) {
@@ -269,6 +268,41 @@ let buscaminasGUI = {
 				break;
 			case 'experto':
 				buscaminasGUI.animationInput(input, classs, 'hard-tile', effect, delay);
+				break;
+			default:
+				break;
+		}
+	},
+
+	/**
+	 * Añade animaciones al input pasado por parámetro al perder.
+	 * @param input elemento DOM.
+	 * @param targetClass clase css que contiene la animación.
+	 * @param loosingAnimation animación que se  añadirá a los input al perder.
+	 * @param level nivel actual de la partida.
+	 */
+	animationLoose(input, targetClass, loosingAnimation, level) {
+		buscaminasGUI.cleanCSSClass(input);
+		input.addClass('animated ' + loosingAnimation + ' faster ' + level + ' ' + targetClass);
+	},
+
+
+
+	/**
+	 * Establece una serie de clases CSS según el nivel al perder.
+	 * @param classs clase que se añadirá al input.
+	 * @param input elemento al que se le añade la clase
+	 */
+	looseStyles(classs, input, delay = '') {
+		switch (buscaminas.nivel) {
+			case 'fácil':
+				buscaminasGUI.animationLoose(input, classs, 'rollIn ' + delay, 'easy-tile');
+				break;
+			case 'difícil':
+				buscaminasGUI.animationLoose(input, classs, 'rollIn ' + delay, 'medium-tile');
+				break;
+			case 'experto':
+				buscaminasGUI.animationLoose(input, classs, 'rollIn ' + delay, 'hard-tile');
 				break;
 			default:
 				break;
@@ -317,7 +351,7 @@ let buscaminasGUI = {
 				$element.removeClass('cover-flag');
 				$element.addClass('uncover-win');
 			} else {
-				buscaminasGUI.levelStyles(
+				buscaminasGUI.looseStyles(
 					colors[Math.floor(Math.random() * (colors.length - 1 - 0)) + 0],
 					$element,
 					'delay-' + counterDelay + 's'
