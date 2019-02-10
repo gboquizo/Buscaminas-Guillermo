@@ -169,10 +169,8 @@ let buscaminasGUI = {
 				if (buscaminas.guardarSeleccionContiguas.size > 0) {
 					for (let tile of buscaminas.guardarSeleccionContiguas) {
 						$('#' + tile).removeClass('fadeInLeftBig');
-						$('#' + tile).removeClass('rollIn');
-						$('#' + tile).addClass('cover-tile-opacity', 400, () =>
-							$('#' + tile).removeClass('cover-tile-opacity')
-						);
+
+						$('#' + tile).effect('highlight', 'fast');
 					}
 				}
 			}
@@ -214,10 +212,10 @@ let buscaminasGUI = {
 			return;
 		}
 
-		let counterDelay = 0;
+		let counterDelay = 100;
 
 		for (const item of buscaminas.guardarAperturaCasillas) {
-			counterDelay++;
+			counterDelay += 80;
 			let fila = parseInt(item.split('-')[0]);
 			let columna = parseInt(item.split('-')[1]);
 			let $element = $('#' + fila + '-' + columna);
@@ -227,12 +225,11 @@ let buscaminasGUI = {
 				} else {
 					$element.val(buscaminas.tableroVisible[fila][columna]);
 				}
-				buscaminasGUI.levelStyles('uncover-tile', $element, 'delay-' + counterDelay + 's');
+				buscaminasGUI.levelStyles('uncover-tile', $element, counterDelay);
 			}
-			if (counterDelay === 1) {
+			if (counterDelay === 180) {
 				buscaminasGUI.playAudio('abrir.mp3');
 			}
-
 		}
 		buscaminas.guardarAperturaCasillas.clear();
 	},
@@ -241,17 +238,19 @@ let buscaminasGUI = {
 	 * Añade animaciones al input pasado por parámetro.
 	 * @param input elemento DOM.
 	 * @param targetClass clase css que contiene la animación.
-	 * @param initialAnimation animación que se le añadirá a los input con la clase inicial.
-	 * @param callbackAnimation animación que se le añadirá a los input que no tengan la clase inicial.
 	 * @param level nivel actual de la partida.
+	 * @param effect efecto que se le añadirá a los input.
+	 * @param delay tiempo de duración de la animación.
+	
 	 */
-	animationInput(input, targetClass, initialAnimation, callbackAnimation, level) {
+	animationInput(input, targetClass, level, effect, delay) {
 		if (targetClass === 'cover-tile') {
 			buscaminasGUI.cleanCSSClass(input);
-			input.addClass('animated ' + initialAnimation + ' faster ' + level + ' ' + targetClass);
+			input.addClass('animated ' + 'fadeInLeftBig' + ' faster ' + level + ' ' + targetClass);
 		} else {
 			buscaminasGUI.cleanCSSClass(input);
-			input.addClass('animated ' + callbackAnimation + ' faster ' + level + ' ' + targetClass);
+			input.addClass(level + ' ' + targetClass);
+			input.effect(effect, delay);
 		}
 	},
 
@@ -260,16 +259,16 @@ let buscaminasGUI = {
 	 * @param classs clase que se añadirá al input.
 	 * @param input elemento al que se le añade la clase
 	 */
-	levelStyles(classs, input, delay = '') {
+	levelStyles(classs, input, delay = "100", effect = 'fade') {
 		switch (buscaminas.nivel) {
 			case 'fácil':
-				buscaminasGUI.animationInput(input, classs, 'fadeInLeftBig', 'rollIn ' + delay, 'easy-tile');
+				buscaminasGUI.animationInput(input, classs, 'easy-tile', effect, delay);
 				break;
 			case 'difícil':
-				buscaminasGUI.animationInput(input, classs, 'fadeInLeftBig', 'rollIn ' + delay, 'medium-tile');
+				buscaminasGUI.animationInput(input, classs, 'medium-tile', effect, delay);
 				break;
 			case 'experto':
-				buscaminasGUI.animationInput(input, classs, 'fadeInLeftBig', 'rollIn ' + delay, 'hard-tile');
+				buscaminasGUI.animationInput(input, classs, 'hard-tile', effect, delay);
 				break;
 			default:
 				break;
@@ -310,10 +309,12 @@ let buscaminasGUI = {
 		let counterDelay = 0;
 		for (let mina of buscaminas.guardarAperturaMinas) {
 			counterDelay++;
+			let $input = $('input')
 			let $element = $('#' + mina);
 			if (buscaminas.flagGanar) {
-				$element.removeClass('cover-flag') || $element.removeClass('cover-tile');
-				$element.addClass('uncover-tile');
+				$input.removeClass('cover-tile')
+				$input.addClass('uncover-tile');
+				$element.removeClass('cover-flag');
 				$element.addClass('uncover-win');
 			} else {
 				buscaminasGUI.levelStyles(
@@ -677,12 +678,11 @@ let buscaminasGUI = {
             </html>
 		`
 		let params = `scrollbars=yes,resizable=no,status=yes,location=yes,toolbar=yes,menubar=yes,width=700,height=800, left=1000,top=0`;
-		let instructionsWindow = window.open("", "Instrucciones de juego", params);
+		let instructionsWindow = window.open('', 'Instrucciones de juego', params);
 		instructionsWindow.document.open();
 		instructionsWindow.document.write(html);
 		instructionsWindow.document.close();
-	},
-
+	}
 };
 
 $(init);
