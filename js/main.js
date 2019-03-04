@@ -202,8 +202,7 @@
 				throw new Error(msgCoordenadaNoValida);
 			}
 			if (
-				buscaminasMain.flagPerder ||
-				buscaminasMain.flagGanar ||
+				!buscaminasMain.juegoNoFinalizado() ||
 				buscaminasMain.tableroPulsadas[x][y] === '🞫' ||
 				buscaminasMain.tableroVisible[x][y] === '🏴'
 			) {
@@ -296,8 +295,7 @@
 			if (
 				buscaminasMain.tableroPulsadas[x][y] !== '🞫' &&
 				buscaminasMain.tableroVisible[x][y] !== '🏴' &&
-				!buscaminasMain.flagGanar &&
-				!buscaminasMain.flagPerder
+				buscaminasMain.juegoNoFinalizado()
 			) {
 				if (buscaminasMain.banderas > 0) {
 					buscaminasMain.tableroVisible[x][y] = '🏴';
@@ -340,6 +338,11 @@
 			if (x > buscaminasMain.filas || y > buscaminasMain.columnas) {
 				throw new Error(msgCoordenadaNoValida);
 			}
+
+			if (!buscaminasMain.juegoNoFinalizado()) {
+				return;
+			}
+
 			if (buscaminasMain.obtenerBanderasAlrededor(x, y) === buscaminasMain.tableroLogica[x][y]) {
 				if (
 					x > 0 &&
@@ -590,6 +593,9 @@
 				buscaminasMain.eliminarBanderas();
 				//throw new Error('Has ganado la partida');
 			}
+		},
+		juegoNoFinalizado() {
+			return !buscaminasMain.flagGanar && !buscaminasMain.flagPerder;
 		}
 	};
 

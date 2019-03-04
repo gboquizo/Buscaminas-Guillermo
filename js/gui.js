@@ -98,7 +98,7 @@
 			let coordenada = buscaminasGUI.getCoordinates(element);
 			try {
 				buscaminas.picar(coordenada.fila, coordenada.columna);
-				if (!buscaminas.flagGanar && !buscaminas.flagPerder) {
+				if (buscaminas.juegoNoFinalizado()) {
 					buscaminasGUI.updateGUI();
 				}
 				buscaminasGUI.updateFlags();
@@ -126,7 +126,7 @@
 			let coordenada = buscaminasGUI.getCoordinates(element);
 			try {
 				buscaminas.marcar(coordenada.fila, coordenada.columna);
-				if (!buscaminas.flagGanar && !buscaminas.flagPerder) {
+				if (buscaminas.juegoNoFinalizado()) {
 					if (buscaminas.tableroVisible[coordenada.fila][coordenada.columna] === '🏴') {
 						buscaminasGUI.playAudio('flag.mp3');
 						buscaminasGUI.levelStyles('cover-flag', element);
@@ -159,7 +159,7 @@
 			let coordenada = buscaminasGUI.getCoordinates(element);
 			try {
 				buscaminas.despejar(coordenada.fila, coordenada.columna);
-				if (!buscaminas.flagGanar && !buscaminas.flagPerder) {
+				if (buscaminas.juegoNoFinalizado()) {
 					buscaminasGUI.updateGUI();
 					if (buscaminas.guardarSeleccionContiguas.size > 0) {
 						for (let tile of buscaminas.guardarSeleccionContiguas) {
@@ -201,7 +201,7 @@
 		 * en caso de victoria o derrota descubre las minas y actualiza las clases de las casillas.
 		 */
 		updateGUI() {
-			if (buscaminas.flagPerder || buscaminas.flagGanar) {
+			if (!(buscaminas.juegoNoFinalizado())) {
 				buscaminasGUI.uncoverMines();
 				return;
 			}
@@ -366,7 +366,7 @@
 		showGameTime() {
 			let seconds = 0;
 			let interval = setInterval(() => {
-				if (!buscaminas.flagPerder && !buscaminas.flagGanar) {
+				if (buscaminas.juegoNoFinalizado()) {
 					seconds++;
 					$time.text(seconds);
 				} else {
