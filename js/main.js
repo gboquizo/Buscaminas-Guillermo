@@ -1,530 +1,601 @@
 /**
- * Funcionalidad del buscaminas por consola.
+ * Funcionalidad del buscaminasMain por consola.
  * @author Guillermo Boquizo Sánchez.
  */
-
-/**
- * Objeto buscaminas con la funcionalidad por consola.
- */
-export let buscaminas = {
-	tableroLogica: [],
-	tableroCopia: [],
-	tableroVisible: [],
-	tableroPulsadas: [],
-	nivel: '',
-	filas: 0,
-	columnas: 0,
-	minas: 0,
-	banderas: 0,
-	flagPerder: false,
-	flagGanar: false,
-	guardarAperturaCasillas: new Set(),
-	guardarAperturaMinas: new Set(),
-	guardarCoordenadasBanderas: new Set(),
-	guardarSeleccionContiguas: new Set(),
+{
+	const msgGanar = "¡¡¡ Enhorabuena, has ganado !!!";
+	const msgPerder = "Pulsaste una mina, has perdido";
+	const msgCoordenadaNoValida = "Coordenadas inválidas.";
 
 	/**
-	 * Realiza la carga inicial de la funcionalidad del buscaminas.
+	 * Objeto buscaminasMain con la funcionalidad por consola.
 	 */
-	init() {
-		buscaminas.flagPerder = false;
-		buscaminas.flagGanar = false;
-		buscaminas.seleccionarNivel();
-		buscaminas.instrucciones();
-		buscaminas.generarTableros();
-		buscaminas.generarMinas();
-		buscaminas.cargarNumeros();
-	},
+	let buscaminasMain = {
+		tableroLogica: [],
+		tableroCopia: [],
+		tableroVisible: [],
+		tableroPulsadas: [],
+		nivel: '',
+		filas: 0,
+		columnas: 0,
+		minas: 0,
+		banderas: 0,
+		flagPerder: false,
+		flagGanar: false,
+		guardarAperturaCasillas: new Set(),
+		guardarAperturaMinas: new Set(),
+		guardarCoordenadasBanderas: new Set(),
+		guardarSeleccionContiguas: new Set(),
 
-	/**
-	 * Permite seleccionar el nivel de juego.
-	 */
-	seleccionarNivel() {
-		switch (buscaminas.nivel.toLowerCase()) {
-			case 'fácil':
-				buscaminas.filas = 8;
-				buscaminas.columnas = 8;
-				buscaminas.minas = 10;
-				buscaminas.banderas = 10;
-				break;
-			case 'difícil':
-				buscaminas.filas = 16;
-				buscaminas.columnas = 16;
-				buscaminas.minas = 40;
-				buscaminas.banderas = 40;
-				break;
-			case 'experto':
-				buscaminas.filas = 16;
-				buscaminas.columnas = 20;
-				buscaminas.minas = 99;
-				buscaminas.banderas = 99;
-				break;
-			default:
-				break;
-		}
-	},
+		/**
+		 * Realiza la carga inicial de la funcionalidad del buscaminasMain.
+		 */
+		init() {
+			buscaminasMain.flagPerder = false;
+			buscaminasMain.flagGanar = false;
+			buscaminasMain.seleccionarNivel();
+			buscaminasMain.instrucciones();
+			buscaminasMain.generarTableros();
+			buscaminasMain.generarMinas();
+			buscaminasMain.cargarNumeros();
+		},
 
-	/**
-	 * Muestra las instrucciones de juego del buscaminas. 
-	 */
-	instrucciones() {
-		console.clear();
-		let newline = '\n';
-		console.log(
-			'Bienvenido al buscaminas.' +
-			newline +
-			'Para jugar utiliza la interfaz gráfica:' +
-			newline +
-			'Para picar, simplemente haz click izquierdo en una casilla' +
-			newline +
-			'Para poner o quitar una bandera, haz click derecho.' +
-			newline +
-			'Para despejar una casilla, haz click con ambos botones en una casilla' +
-			newline +
-			'previamente picada, una vez hayas marcado las minas próximas,' +
-			'lo que despejará una casilla con banderas en sus proximidades.' +
-			newline +
-			'Para ver el tablero escribe buscaminas.mostrar()'
-		);
-	},
-
-	/**
-	 * Muestra los tableros al cargar.
-	 */
-	mostrar() {
-		console.clear();
-		console.log('Tablero de lógica:\n');
-		console.table(buscaminas.tableroLogica);
-	},
-
-	/**
-	 * Genera los tableros y los inicializa con valores por defecto.
-	 */
-	generarTableros() {
-		for (let i = 0; i < buscaminas.filas; i++) {
-			buscaminas.tableroLogica[i] = [];
-			buscaminas.tableroVisible[i] = [];
-			buscaminas.tableroCopia[i] = [];
-			buscaminas.tableroPulsadas[i] = [];
-			for (let j = 0; j < buscaminas.columnas; j++) {
-				buscaminas.tableroLogica[i][j] = 0;
-				buscaminas.tableroVisible[i][j] = "■";
-				buscaminas.tableroCopia[i][j] = 0;
-				buscaminas.tableroPulsadas[i][j] = "NP";
+		/**
+		 * Permite seleccionar el nivel de juego.
+		 */
+		seleccionarNivel() {
+			switch (buscaminasMain.nivel.toLowerCase()) {
+				case 'fácil':
+					buscaminasMain.filas = 8;
+					buscaminasMain.columnas = 8;
+					buscaminasMain.minas = 10;
+					buscaminasMain.banderas = 10;
+					break;
+				case 'difícil':
+					buscaminasMain.filas = 16;
+					buscaminasMain.columnas = 16;
+					buscaminasMain.minas = 40;
+					buscaminasMain.banderas = 40;
+					break;
+				case 'experto':
+					buscaminasMain.filas = 16;
+					buscaminasMain.columnas = 20;
+					buscaminasMain.minas = 99;
+					buscaminasMain.banderas = 99;
+					break;
+				default:
+					break;
 			}
-		}
-	},
+		},
 
-	/**
-	 * Genera y coloca las minas.
-	 */
-	generarMinas() {
-		for (let i = 0; i < buscaminas.minas; i++) {
-			let fila = Math.floor(Math.random() * (buscaminas.filas - 1 - 0) + 0);
-			let columna = Math.floor(Math.random() * (buscaminas.columnas - 1 - 0) + 0);
+		/**
+		 * Muestra las instrucciones de juego del buscaminasMain. 
+		 */
+		instrucciones() {
+			console.clear();
+			let newline = '\n';
+			console.log(
+				'Bienvenido al buscaminasMain.' +
+				newline +
+				'Para jugar utiliza la interfaz gráfica:' +
+				newline +
+				'Para picar, simplemente haz click izquierdo en una casilla' +
+				newline +
+				'Para poner o quitar una bandera, haz click derecho.' +
+				newline +
+				'Para despejar una casilla, haz click con ambos botones en una casilla' +
+				newline +
+				'previamente picada, una vez hayas marcado las minas próximas,' +
+				'lo que despejará una casilla con banderas en sus proximidades.' +
+				newline +
+				'Para ver el tablero escribe buscaminasMain.mostrar()'
+			);
+		},
 
-			while (buscaminas.tableroLogica[fila][columna] === "💣") {
-				fila = Math.floor(Math.random() * (buscaminas.filas - 1 - 0) + 0);
-				columna = Math.floor(Math.random() * (buscaminas.columnas - 1 - 0) + 0);
-			}
-			buscaminas.tableroLogica[fila][columna] = "💣";
-			buscaminas.tableroCopia[fila][columna] = "💣";
-			buscaminas.guardarAperturaMinas.add(fila + '-' + columna);
-		}
-	},
-
-	/**
-	 * Carga los números en función de las minas cercanas.
-	 */
-	cargarNumeros() {
-		for (let i = 0; i < buscaminas.filas; i++) {
-			for (let j = 0; j < buscaminas.columnas; j++) {
-				if (buscaminas.tableroLogica[i][j] === "💣") {
-					if (i == 0 && j == 0) {
-						buscaminas.contarMinas(i, j, i + 1, j + 1);
-					} else if (i == 0 && (j > 0 && j < buscaminas.minas - 1)) {
-						buscaminas.contarMinas(i, j - 1, i + 1, j + 1);
-					} else if (i == 0 && j == buscaminas.minas - 1) {
-						buscaminas.contarMinas(i, j - 1, i + 1, j);
-					} else if (j == buscaminas.minas - 1 && (i > 0 && i < buscaminas.minas - 1)) {
-						buscaminas.contarMinas(i - 1, j - 1, i + 1, j);
-					} else if (i == buscaminas.minas - 1 && j == buscaminas.minas - 1) {
-						buscaminas.contarMinas(i - 1, j - 1, i, j);
-					} else if (i == buscaminas.minas - 1 && (j > 0 && j < buscaminas.minas - 1)) {
-						buscaminas.contarMinas(i - 1, j - 1, i, j + 1);
-					} else if (i == buscaminas.minas - 1 && j == 0) {
-						buscaminas.contarMinas(i - 1, j, i, j + 1);
-					} else if (j == 0 && (i > 0 && i < buscaminas.minas - 1)) {
-						buscaminas.contarMinas(i - 1, j, i + 1, j + 1);
-					} else {
-						buscaminas.contarMinas(i - 1, j - 1, i + 1, j + 1);
-					}
-				}
-			}
-		}
-	},
-
-	/**
-	 * Cuenta y coloca el número de minas.
-	 * @param inicioFila - Inicio de la fila.
-	 * @param inicioColumna - Inicio de la columna.
-	 * @param finFila - Fin de la fila.
-	 * @param finColumna - Fin de la columna.
-	 */
-	contarMinas(inicioFila, inicioColumna, finFila, finColumna) {
-		for (let i = inicioFila; i <= finFila; i++) {
-			for (let j = inicioColumna; j <= finColumna; j++) {
-				if (buscaminas.tableroLogica[i][j] !== "💣") {
-					if (buscaminas.tableroLogica[i][j] === '0') {
-						buscaminas.tableroLogica[i][j] = 0 + 1;
-						buscaminas.tableroCopia[i][j] = 0 + 1;
-					} else {
-						buscaminas.tableroLogica[i][j] = parseInt(buscaminas.tableroLogica[i][j]) + 1;
-						buscaminas.tableroCopia[i][j] = parseInt(buscaminas.tableroLogica[i][j]);
-					}
-				}
-			}
-		}
-	},
-
-	/**
-	 * Pica una casilla.
-	 * @param  i coordenada para la fila.
-	 * @param  j coordenada para la columna.
-	 */
-	picar(i, j) {
-		if (
-			buscaminas.flagPerder ||
-			buscaminas.flagGanar ||
-			buscaminas.tableroPulsadas[i][j] === "🞫" ||
-			buscaminas.tableroVisible[i][j] === "🏴"
-		) {
-			return;
-		}
-
-		if (buscaminas.tableroLogica[i][j] === "💣") {
-			buscaminas.flagPerder = true;
-			throw new Error('Pulsaste una mina, has perdido');
-		}
-
-		buscaminas.abrirCeros(i, j);
-		buscaminas.cargarPulsacion(i, j);
-		buscaminas.actualizaCambios();
-		console.clear();
-		console.log('Tablero de lógica:\n');
-		console.table(buscaminas.tableroLogica);
-		console.log('Tablero visible:\n');
-		console.table(buscaminas.tableroVisible);
-		console.log('Tablero pulsadas:\n');
-		console.table(buscaminas.tableroPulsadas);
-		buscaminas.comprobarGanador();
-	},
-
-	/**
-	 * Descubre las casillas, mediante recursividad.
-	 * @param x coordenada para la fila.
-	 * @param y coordenada para la columna.
-	 */
-	abrirCeros(x, y) {
-		if (buscaminas.tableroCopia[x][y] !== 0) {
-			if (buscaminas.tableroVisible[x][y] === "🏴" && buscaminas.tableroPulsadas[x][y] === "🞫") {
-				buscaminas.tableroVisible[x][y] = buscaminas.tableroCopia[x][y];
-				buscaminas.banderas++;
-			}
-		}
-		if (buscaminas.tableroCopia[x][y] === 0) {
-			buscaminas.tableroCopia[x][y] = -1;
-			if (buscaminas.tableroLogica[x][y] === 0) {
-				if (buscaminas.tableroVisible[x][y] === "🏴" && buscaminas.tableroPulsadas[x][y] === "🞫") {
-					buscaminas.tableroVisible[x][y] = buscaminas.tableroCopia[x][y] + 1;
-					buscaminas.banderas++;
-				}
-				for (let j = Math.max(x - 1, 0); j <= Math.min(x + 1, buscaminas.filas - 1); j++) {
-					for (let k = Math.max(y - 1, 0); k <= Math.min(y + 1, buscaminas.columnas - 1); k++) {
-						buscaminas.cargarPulsacion(j, k);
-						buscaminas.abrirCeros(j, k);
-					}
-				}
-			}
-		}
-	},
-
-	/**
-	 * Carga las casillas pulsadas en su correspondiente matriz.
-	 * @param x coordenada para la fila.
-	 * @param  y coordenada para la columna.
-	 */
-	cargarPulsacion(x, y) {
-		buscaminas.tableroPulsadas[x][y] = "🞫";
-		buscaminas.guardarAperturaCasillas.add(x + '-' + y);
-	},
-
-	/**
-	 * Actualiza los cambios en el tablero visible.
-	 */
-	actualizaCambios() {
-		for (let i = 0; i < buscaminas.filas; i++) {
-			for (let j = 0; j < buscaminas.columnas; j++) {
-				if (
-					buscaminas.tableroPulsadas[i][j] === "🞫" &&
-					(buscaminas.tableroVisible[i][j] === "■" || buscaminas.tableroVisible[i][j] === "🏴")
-				) {
-					buscaminas.tableroVisible[i][j] = buscaminas.tableroLogica[i][j];
-				}
-			}
-		}
-	},
-
-	/**
-	 * Marca y desmarca una casilla con una bandera.
-	 *
-	 * @param x coordenada para la fila.
-	 * @param y coordenada para la columna.
-	 */
-	marcar(x, y) {
-		if (
-			buscaminas.tableroPulsadas[x][y] !== "🞫" &&
-			buscaminas.tableroVisible[x][y] !== "🏴" &&
-			!buscaminas.flagGanar &&
-			!buscaminas.flagPerder
-		) {
-			if (buscaminas.banderas > 0) {
-				buscaminas.tableroVisible[x][y] = "🏴";
-				buscaminas.banderas--;
-				console.clear();
-				console.log('Tablero de lógica:\n');
-				console.table(buscaminas.tableroLogica);
-				console.log('Tablero visible:\n');
-				console.table(buscaminas.tableroVisible);
-				console.log('Tablero pulsadas:\n');
-				console.table(buscaminas.tableroPulsadas);
-				console.log(buscaminas.banderas);
-			}
-		} else if (buscaminas.tableroPulsadas[x][y] !== "🞫" && buscaminas.tableroVisible[x][y] === "🏴") {
-			buscaminas.tableroVisible[x][y] = "■";
-			buscaminas.banderas++;
-
+		/**
+		 * Muestra los tableros al cargar.
+		 */
+		mostrar() {
 			console.clear();
 			console.log('Tablero de lógica:\n');
-			console.table(buscaminas.tableroLogica);
-			console.log('Tablero visible:\n');
-			console.table(buscaminas.tableroVisible);
-			console.log('Tablero pulsadas:\n');
-			console.table(buscaminas.tableroPulsadas);
-			console.log(buscaminas.banderas);
-		}
-		buscaminas.comprobarGanadorConBanderas();
-	},
+			console.table(buscaminasMain.tableroLogica);
+		},
 
-	/**
-	 * Intenta destapar las casillas colindantes, sólo si el número de banderas
-	 * se corresponden con las que indica la casilla. Entonces muestra el campo
-	 * de minas actualizado.
-	 * En caso de estar las banderas equivocadas se indica que se ha perdido el
-	 * juego.
-	 * @param x coordenada para la fila.
-	 * @param y coordenada para la columna.
-	 */
-	despejar(x, y) {
-		buscaminas.guardarSeleccionContiguas.clear();
-		if (x > buscaminas.filas || y > buscaminas.columnas) {
-			throw new Error('Coordenadas inválidas.');
-		}
-		if (buscaminas.obtenerBanderasAlrededor(x, y) === buscaminas.tableroLogica[x][y]) {
-			if ((x > 0 && y > 0) && (buscaminas.tableroVisible[x - 1][y - 1] !== "🏴" && buscaminas.tableroPulsadas[x - 1][y - 1] !== "🞫")) {
-				buscaminas.picar(x - 1, y - 1);
-			}
-			if ((y > 0) && (buscaminas.tableroVisible[x][y - 1] !== "🏴" && buscaminas.tableroPulsadas[x][y - 1] !== "🞫")) {
-				buscaminas.picar(x, y - 1);
-			}
-			if ((y > 0 && x < buscaminas.filas - 1) && (buscaminas.tableroVisible[x + 1][y - 1] !== "🏴" &&
-					buscaminas.tableroPulsadas[x + 1][y - 1] !== "🞫")) {
-				buscaminas.picar(x + 1, y - 1);
-			}
-			if ((x > 0) && (buscaminas.tableroVisible[x - 1][y] !== "🏴" && buscaminas.tableroPulsadas[x - 1][y] !== "🞫")) {
-				buscaminas.picar(x - 1, y);
-			}
-			if ((x < buscaminas.filas - 1) && (buscaminas.tableroVisible[x + 1][y] !== "🏴" && buscaminas.tableroPulsadas[x + 1][y] !== "🞫")) {
-				buscaminas.picar(x + 1, y);
-			}
-			if ((y < buscaminas.columnas - 1) && (buscaminas.tableroVisible[x][y + 1] !== "🏴" && buscaminas.tableroPulsadas[x][y + 1] !== "🞫")) {
-				buscaminas.picar(x, y + 1);
-			}
-			if ((x < buscaminas.filas - 1 && y < buscaminas.columnas - 1) && (buscaminas.tableroVisible[x + 1][y + 1] !== "🏴" &&
-					buscaminas.tableroPulsadas[x + 1][y + 1] !== "🞫")) {
-				buscaminas.picar(x + 1, y + 1);
-			}
-			if ((x > 0 && y < buscaminas.columnas - 1) && (buscaminas.tableroVisible[x - 1][y + 1] !== "🏴" &&
-					buscaminas.tableroPulsadas[x - 1][y + 1] !== "🞫")) {
-				buscaminas.picar(x - 1, y + 1);
-			}
-		} else {
-			buscaminas.guardarSeleccionContiguas.clear();
-			if ((x > 0 && y > 0) && (buscaminas.tableroVisible[x - 1][y - 1] !== "🏴" && buscaminas.tableroPulsadas[x - 1][y - 1] !== "🞫")) {
-				buscaminas.guardarSeleccionContiguas.add(x - 1 + '-' + (y - 1));
-			}
-			if ((y > 0) && (buscaminas.tableroVisible[x][y - 1] !== "🏴" && buscaminas.tableroPulsadas[x][y - 1] !== "🞫")) {
-				buscaminas.guardarSeleccionContiguas.add(x + '-' + (y - 1));
-			}
-			if ((y > 0 && x < buscaminas.filas - 1) && (buscaminas.tableroVisible[x + 1][y - 1] !== "🏴" &&
-					buscaminas.tableroPulsadas[x + 1][y - 1] !== "🞫")) {
-				buscaminas.guardarSeleccionContiguas.add(x + 1 + '-' + (y - 1));
-			}
-			if ((x > 0) && (buscaminas.tableroVisible[x - 1][y] !== "🏴" && buscaminas.tableroPulsadas[x - 1][y] !== "🞫")) {
-				buscaminas.guardarSeleccionContiguas.add(x - 1 + '-' + y);
-			}
-			if ((x < buscaminas.filas - 1) && (buscaminas.tableroVisible[x + 1][y] !== "🏴" && buscaminas.tableroPulsadas[x + 1][y] !== "🞫")) {
-				buscaminas.guardarSeleccionContiguas.add(x + 1 + '-' + y);
-			}
-			if ((y < buscaminas.columnas - 1) && (buscaminas.tableroVisible[x][y + 1] !== "🏴" && buscaminas.tableroPulsadas[x][y + 1] !== "🞫")) {
-				buscaminas.guardarSeleccionContiguas.add(x + '-' + (y + 1));
-			}
-			if ((x < buscaminas.filas - 1 && y < buscaminas.columnas - 1) && (buscaminas.tableroVisible[x + 1][y + 1] !== "🏴" &&
-					buscaminas.tableroPulsadas[x + 1][y + 1] !== "🞫")) {
-				buscaminas.guardarSeleccionContiguas.add(x + 1 + '-' + (y + 1));
-			}
-			if ((x > 0 && y < buscaminas.columnas - 1) && (buscaminas.tableroVisible[x - 1][y + 1] !== "🏴" &&
-					buscaminas.tableroPulsadas[x - 1][y + 1] !== "🞫")) {
-				buscaminas.guardarSeleccionContiguas.add(x - 1 + '-' + (y + 1));
-			}
-		}
-	},
-
-	/**
-	 * Obtiene el numero de banderas de las casillas de alrededor de la casilla pasada por parámetro
-	 * @param x coordenada de la fila
-	 * @param y coordenada de la columna
-	 */
-	obtenerBanderasAlrededor(x, y) {
-		let totalBanderas = 0;
-		if (buscaminas.tableroPulsadas[x][y] === "🞫") {
-			if ((x > 0 && y > 0) && (buscaminas.tableroVisible[x - 1][y - 1] === "🏴")) {
-				totalBanderas++;
-			}
-
-			if ((y > 0) && (buscaminas.tableroVisible[x][y - 1] === "🏴")) {
-				totalBanderas++;
-			}
-
-			if ((y > 0 && x < buscaminas.filas - 1) && (buscaminas.tableroVisible[x + 1][y - 1] === "🏴")) {
-				totalBanderas++;
-			}
-
-			if ((x > 0) && (buscaminas.tableroVisible[x - 1][y] === "🏴")) {
-				totalBanderas++;
-			}
-
-			if ((x < buscaminas.filas - 1) && (buscaminas.tableroVisible[x + 1][y] === "🏴")) {
-				totalBanderas++;
-			}
-
-			if ((y < buscaminas.columnas - 1) && (buscaminas.tableroVisible[x][y + 1] === "🏴")) {
-				totalBanderas++;
-			}
-
-			if ((x < buscaminas.filas - 1 && y < buscaminas.columnas - 1) && (buscaminas.tableroVisible[x + 1][y + 1] === "🏴")) {
-				totalBanderas++;
-			}
-
-			if ((x > 0 && buscaminas.columnas - 1) && (buscaminas.tableroVisible[x - 1][y + 1] === "🏴")) {
-				totalBanderas++;
-			}
-		}
-		return totalBanderas;
-	},
-
-	/**
-	 * Comprueba si se gana de manera convencional.
-	 */
-	comprobarGanador() {
-		if (buscaminas.obtenerPulsadas() === buscaminas.obtenerPendientesParaGanar()) {
-			buscaminas.flagGanar = true;
-			buscaminas.eliminarBanderas();
-			throw new Error('¡¡¡ Enhorabuena, has ganado !!!');
-		}
-	},
-
-	/**
-	 * Devuelve el número de casillas pulsadas en el tablero.
-	 */
-	obtenerPulsadas() {
-		let contador = 0;
-		for (let i = 0; i < buscaminas.filas; i++) {
-			for (let j = 0; j < buscaminas.columnas; j++) {
-				if (buscaminas.tableroPulsadas[i][j] === "🞫") {
-					contador++;
+		/**
+		 * Genera los tableros y los inicializa con valores por defecto.
+		 */
+		generarTableros() {
+			for (let i = 0; i < buscaminasMain.filas; i++) {
+				buscaminasMain.tableroLogica[i] = [];
+				buscaminasMain.tableroVisible[i] = [];
+				buscaminasMain.tableroCopia[i] = [];
+				buscaminasMain.tableroPulsadas[i] = [];
+				for (let j = 0; j < buscaminasMain.columnas; j++) {
+					buscaminasMain.tableroLogica[i][j] = 0;
+					buscaminasMain.tableroVisible[i][j] = '■';
+					buscaminasMain.tableroCopia[i][j] = 0;
+					buscaminasMain.tableroPulsadas[i][j] = 'NP';
 				}
 			}
-		}
-		return contador;
-	},
+		},
 
-	/**
-	 * Devuelve el número de casillas que deben quedar pendientes para ganar del tablero.
-	 */
-	obtenerPendientesParaGanar() {
-		let contador = 0;
-		for (let i = 0; i < buscaminas.filas; i++) {
-			for (let j = 0; j < buscaminas.columnas; j++) {
-				if (buscaminas.tableroLogica[i][j] !== "💣") {
-					contador++;
+		/**
+		 * Genera y coloca las minas.
+		 */
+		generarMinas() {
+
+			for (let i = 0; i < buscaminasMain.minas; i++) {
+				let fila;
+				let columna;
+				do {
+					fila = Math.floor(Math.random() * (buscaminasMain.filas - 1 - 0) + 0);
+					columna = Math.floor(Math.random() * (buscaminasMain.columnas - 1 - 0) + 0);
 				}
+				while (buscaminasMain.tableroLogica[fila][columna] === '💣');
+				buscaminasMain.tableroLogica[fila][columna] = '💣';
+				buscaminasMain.tableroCopia[fila][columna] = '💣';
+				buscaminasMain.guardarAperturaMinas.add(fila + '-' + columna);
 			}
-		}
-		return contador;
-	},
+		},
 
-	/**
-	 * Devuelve el número de banderas del tablero.
-	 */
-	obtenerBanderasDelTablero() {
-		let banderas = 0;
-		for (let i = 0; i < buscaminas.filas; i++) {
-			for (let j = 0; j < buscaminas.columnas; j++) {
-				if (buscaminas.tableroVisible[i][j] === "🏴") {
-					banderas++;
-				}
-			}
-		}
-		return banderas;
-	},
-
-	/**
-	 * Comprueba si se ha ganado mediante el uso de banderas.
-	 */
-	comprobarGanadorConBanderas() {
-		let casillasNoPulsadas = 0;
-		let casillasYaPulsadas = 0;
-		let casillasParaGanar = 0;
-		for (let i = 0; i < buscaminas.filas; i++) {
-			for (let j = 0; j < buscaminas.columnas; j++) {
-				if (buscaminas.tableroPulsadas[i][j] === "🞫") {
-					casillasYaPulsadas++;
-				}
-				if (buscaminas.tableroPulsadas[i][j] !== "🞫") {
-					casillasNoPulsadas++;
-					if (
-						casillasNoPulsadas === buscaminas.minas &&
-						(buscaminas.tableroLogica[i][j] === "💣" && buscaminas.tableroVisible[i][j] === "🏴")
-					) {
-						casillasParaGanar++;
+		/**
+		 * Carga los números en función de las minas cercanas.
+		 */
+		cargarNumeros() {
+			for (let i = 0; i < buscaminasMain.filas; i++) {
+				for (let j = 0; j < buscaminasMain.columnas; j++) {
+					if (buscaminasMain.tableroLogica[i][j] === '💣') {
+						if (i == 0 && j == 0) {
+							buscaminasMain.contarMinas(i, j, i + 1, j + 1);
+						} else if (i == 0 && (j > 0 && j < buscaminasMain.minas - 1)) {
+							buscaminasMain.contarMinas(i, j - 1, i + 1, j + 1);
+						} else if (i == 0 && j == buscaminasMain.minas - 1) {
+							buscaminasMain.contarMinas(i, j - 1, i + 1, j);
+						} else if (j == buscaminasMain.minas - 1 && (i > 0 && i < buscaminasMain.minas - 1)) {
+							buscaminasMain.contarMinas(i - 1, j - 1, i + 1, j);
+						} else if (i == buscaminasMain.minas - 1 && j == buscaminasMain.minas - 1) {
+							buscaminasMain.contarMinas(i - 1, j - 1, i, j);
+						} else if (i == buscaminasMain.minas - 1 && (j > 0 && j < buscaminasMain.minas - 1)) {
+							buscaminasMain.contarMinas(i - 1, j - 1, i, j + 1);
+						} else if (i == buscaminasMain.minas - 1 && j == 0) {
+							buscaminasMain.contarMinas(i - 1, j, i, j + 1);
+						} else if (j == 0 && (i > 0 && i < buscaminasMain.minas - 1)) {
+							buscaminasMain.contarMinas(i - 1, j, i + 1, j + 1);
+						} else {
+							buscaminasMain.contarMinas(i - 1, j - 1, i + 1, j + 1);
+						}
 					}
 				}
 			}
-		}
-		if (casillasYaPulsadas > 1 && casillasParaGanar === buscaminas.minas) {
-			buscaminas.flagGanar = true;
-			buscaminas.eliminarBanderas();
-			throw new Error('Has ganado la partida');
-		}
-	},
-	eliminarBanderas() {
-		for (let i = 0; i < buscaminas.filas; i++) {
-			for (let j = 0; j < buscaminas.columnas; j++) {
-				if (buscaminas.tableroVisible[i][j] === "🏴") {
-					buscaminas.guardarCoordenadasBanderas.add(i + '-' + j);
+		},
+
+		/**
+		 * Cuenta y coloca el número de minas.
+		 * @param inicioFila - Inicio de la fila.
+		 * @param inicioColumna - Inicio de la columna.
+		 * @param finFila - Fin de la fila.
+		 * @param finColumna - Fin de la columna.
+		 */
+		contarMinas(inicioFila, inicioColumna, finFila, finColumna) {
+			for (let i = inicioFila; i <= finFila; i++) {
+				for (let j = inicioColumna; j <= finColumna; j++) {
+					if (buscaminasMain.tableroLogica[i][j] !== '💣') {
+						if (buscaminasMain.tableroLogica[i][j] === '0') {
+							buscaminasMain.tableroLogica[i][j] = 0 + 1;
+							buscaminasMain.tableroCopia[i][j] = 0 + 1;
+						} else {
+							buscaminasMain.tableroLogica[i][j] = parseInt(buscaminasMain.tableroLogica[i][j]) + 1;
+							buscaminasMain.tableroCopia[i][j] = parseInt(buscaminasMain.tableroLogica[i][j]);
+						}
+					}
 				}
 			}
+		},
+
+		/**
+		 * Pica una casilla.
+		 * @param  i coordenada para la fila.
+		 * @param  j coordenada para la columna.
+		 */
+		picar(i, j) {
+			if (
+				buscaminasMain.flagPerder ||
+				buscaminasMain.flagGanar ||
+				buscaminasMain.tableroPulsadas[i][j] === '🞫' ||
+				buscaminasMain.tableroVisible[i][j] === '🏴'
+			) {
+				return;
+			}
+
+			if (buscaminasMain.tableroLogica[i][j] === '💣') {
+				buscaminasMain.flagPerder = true;
+				throw new Error(msgPerder);
+			}
+
+			buscaminasMain.abrirCeros(i, j);
+			buscaminasMain.cargarPulsacion(i, j);
+			buscaminasMain.actualizaCambios();
+			// console.clear();
+			// console.log('Tablero de lógica:\n');
+			// console.table(buscaminasMain.tableroLogica);
+			// console.log('Tablero visible:\n');
+			// console.table(buscaminasMain.tableroVisible);
+			// console.log('Tablero pulsadas:\n');
+			// console.table(buscaminasMain.tableroPulsadas);
+			buscaminasMain.comprobarGanador();
+		},
+
+		/**
+		 * Descubre las casillas, mediante recursividad.
+		 * @param x coordenada para la fila.
+		 * @param y coordenada para la columna.
+		 */
+		abrirCeros(x, y) {
+			if (buscaminasMain.tableroCopia[x][y] !== 0) {
+				if (buscaminasMain.tableroVisible[x][y] === '🏴' && buscaminasMain.tableroPulsadas[x][y] === '🞫') {
+					buscaminasMain.tableroVisible[x][y] = buscaminasMain.tableroCopia[x][y];
+					buscaminasMain.banderas++;
+				}
+			}
+			if (buscaminasMain.tableroCopia[x][y] === 0) {
+				buscaminasMain.tableroCopia[x][y] = -1;
+				if (buscaminasMain.tableroLogica[x][y] === 0) {
+					if (buscaminasMain.tableroVisible[x][y] === '🏴' && buscaminasMain.tableroPulsadas[x][y] === '🞫') {
+						buscaminasMain.tableroVisible[x][y] = buscaminasMain.tableroCopia[x][y] + 1;
+						buscaminasMain.banderas++;
+					}
+					for (let j = Math.max(x - 1, 0); j <= Math.min(x + 1, buscaminasMain.filas - 1); j++) {
+						for (let k = Math.max(y - 1, 0); k <= Math.min(y + 1, buscaminasMain.columnas - 1); k++) {
+							buscaminasMain.cargarPulsacion(j, k);
+							buscaminasMain.abrirCeros(j, k);
+						}
+					}
+				}
+			}
+		},
+
+		/**
+		 * Carga las casillas pulsadas en su correspondiente matriz.
+		 * @param x coordenada para la fila.
+		 * @param  y coordenada para la columna.
+		 */
+		cargarPulsacion(x, y) {
+			buscaminasMain.tableroPulsadas[x][y] = '🞫';
+			buscaminasMain.guardarAperturaCasillas.add(x + '-' + y);
+		},
+
+		/**
+		 * Actualiza los cambios en el tablero visible.
+		 */
+		actualizaCambios() {
+			for (let i = 0; i < buscaminasMain.filas; i++) {
+				for (let j = 0; j < buscaminasMain.columnas; j++) {
+					if (
+						buscaminasMain.tableroPulsadas[i][j] === '🞫' &&
+						(buscaminasMain.tableroVisible[i][j] === '■' || buscaminasMain.tableroVisible[i][j] === '🏴')
+					) {
+						buscaminasMain.tableroVisible[i][j] = buscaminasMain.tableroLogica[i][j];
+					}
+				}
+			}
+		},
+
+		/**
+		 * Marca y desmarca una casilla con una bandera.
+		 *
+		 * @param x coordenada para la fila.
+		 * @param y coordenada para la columna.
+		 */
+		marcar(x, y) {
+			if (
+				buscaminasMain.tableroPulsadas[x][y] !== '🞫' &&
+				buscaminasMain.tableroVisible[x][y] !== '🏴' &&
+				!buscaminasMain.flagGanar &&
+				!buscaminasMain.flagPerder
+			) {
+				if (buscaminasMain.banderas > 0) {
+					buscaminasMain.tableroVisible[x][y] = '🏴';
+					buscaminasMain.banderas--;
+					// console.clear();
+					// console.log('Tablero de lógica:\n');
+					// console.table(buscaminasMain.tableroLogica);
+					// console.log('Tablero visible:\n');
+					// console.table(buscaminasMain.tableroVisible);
+					// console.log('Tablero pulsadas:\n');
+					// console.table(buscaminasMain.tableroPulsadas);
+					// console.log(buscaminasMain.banderas);
+				}
+			} else if (buscaminasMain.tableroPulsadas[x][y] !== '🞫' && buscaminasMain.tableroVisible[x][y] === '🏴') {
+				buscaminasMain.tableroVisible[x][y] = '■';
+				buscaminasMain.banderas++;
+				// console.clear();
+				// console.log('Tablero de lógica:\n');
+				// console.table(buscaminasMain.tableroLogica);
+				// console.log('Tablero visible:\n');
+				// console.table(buscaminasMain.tableroVisible);
+				// console.log('Tablero pulsadas:\n');
+				// console.table(buscaminasMain.tableroPulsadas);
+				// console.log(buscaminasMain.banderas);
+			}
+			buscaminasMain.comprobarGanadorConBanderas();
+		},
+
+		/**
+		 * Intenta destapar las casillas colindantes, sólo si el número de banderas
+		 * se corresponden con las que indica la casilla. Entonces muestra el campo
+		 * de minas actualizado.
+		 * En caso de estar las banderas equivocadas se indica que se ha perdido el
+		 * juego.
+		 * @param x coordenada para la fila.
+		 * @param y coordenada para la columna.
+		 */
+		despejar(x, y) {
+			buscaminasMain.guardarSeleccionContiguas.clear();
+			if (x > buscaminasMain.filas || y > buscaminasMain.columnas) {
+				throw new Error(msgCoordenadaNoValida);
+			}
+			if (buscaminasMain.obtenerBanderasAlrededor(x, y) === buscaminasMain.tableroLogica[x][y]) {
+				if (
+					x > 0 &&
+					y > 0 &&
+					(buscaminasMain.tableroVisible[x - 1][y - 1] !== '🏴' && buscaminasMain.tableroPulsadas[x - 1][y - 1] !== '🞫')
+				) {
+					buscaminasMain.picar(x - 1, y - 1);
+				}
+				if (
+					y > 0 &&
+					(buscaminasMain.tableroVisible[x][y - 1] !== '🏴' && buscaminasMain.tableroPulsadas[x][y - 1] !== '🞫')
+				) {
+					buscaminasMain.picar(x, y - 1);
+				}
+				if (
+					y > 0 &&
+					x < buscaminasMain.filas - 1 &&
+					(buscaminasMain.tableroVisible[x + 1][y - 1] !== '🏴' && buscaminasMain.tableroPulsadas[x + 1][y - 1] !== '🞫')
+				) {
+					buscaminasMain.picar(x + 1, y - 1);
+				}
+				if (
+					x > 0 &&
+					(buscaminasMain.tableroVisible[x - 1][y] !== '🏴' && buscaminasMain.tableroPulsadas[x - 1][y] !== '🞫')
+				) {
+					buscaminasMain.picar(x - 1, y);
+				}
+				if (
+					x < buscaminasMain.filas - 1 &&
+					(buscaminasMain.tableroVisible[x + 1][y] !== '🏴' && buscaminasMain.tableroPulsadas[x + 1][y] !== '🞫')
+				) {
+					buscaminasMain.picar(x + 1, y);
+				}
+				if (
+					y < buscaminasMain.columnas - 1 &&
+					(buscaminasMain.tableroVisible[x][y + 1] !== '🏴' && buscaminasMain.tableroPulsadas[x][y + 1] !== '🞫')
+				) {
+					buscaminasMain.picar(x, y + 1);
+				}
+				if (
+					x < buscaminasMain.filas - 1 &&
+					y < buscaminasMain.columnas - 1 &&
+					(buscaminasMain.tableroVisible[x + 1][y + 1] !== '🏴' && buscaminasMain.tableroPulsadas[x + 1][y + 1] !== '🞫')
+				) {
+					buscaminasMain.picar(x + 1, y + 1);
+				}
+				if (
+					x > 0 &&
+					y < buscaminasMain.columnas - 1 &&
+					(buscaminasMain.tableroVisible[x - 1][y + 1] !== '🏴' && buscaminasMain.tableroPulsadas[x - 1][y + 1] !== '🞫')
+				) {
+					buscaminasMain.picar(x - 1, y + 1);
+				}
+			} else {
+				buscaminasMain.guardarSeleccionContiguas.clear();
+				if (
+					x > 0 &&
+					y > 0 &&
+					(buscaminasMain.tableroVisible[x - 1][y - 1] !== '🏴' && buscaminasMain.tableroPulsadas[x - 1][y - 1] !== '🞫')
+				) {
+					buscaminasMain.guardarSeleccionContiguas.add(x - 1 + '-' + (y - 1));
+				}
+				if (
+					y > 0 &&
+					(buscaminasMain.tableroVisible[x][y - 1] !== '🏴' && buscaminasMain.tableroPulsadas[x][y - 1] !== '🞫')
+				) {
+					buscaminasMain.guardarSeleccionContiguas.add(x + '-' + (y - 1));
+				}
+				if (
+					y > 0 &&
+					x < buscaminasMain.filas - 1 &&
+					(buscaminasMain.tableroVisible[x + 1][y - 1] !== '🏴' && buscaminasMain.tableroPulsadas[x + 1][y - 1] !== '🞫')
+				) {
+					buscaminasMain.guardarSeleccionContiguas.add(x + 1 + '-' + (y - 1));
+				}
+				if (
+					x > 0 &&
+					(buscaminasMain.tableroVisible[x - 1][y] !== '🏴' && buscaminasMain.tableroPulsadas[x - 1][y] !== '🞫')
+				) {
+					buscaminasMain.guardarSeleccionContiguas.add(x - 1 + '-' + y);
+				}
+				if (
+					x < buscaminasMain.filas - 1 &&
+					(buscaminasMain.tableroVisible[x + 1][y] !== '🏴' && buscaminasMain.tableroPulsadas[x + 1][y] !== '🞫')
+				) {
+					buscaminasMain.guardarSeleccionContiguas.add(x + 1 + '-' + y);
+				}
+				if (
+					y < buscaminasMain.columnas - 1 &&
+					(buscaminasMain.tableroVisible[x][y + 1] !== '🏴' && buscaminasMain.tableroPulsadas[x][y + 1] !== '🞫')
+				) {
+					buscaminasMain.guardarSeleccionContiguas.add(x + '-' + (y + 1));
+				}
+				if (
+					x < buscaminasMain.filas - 1 &&
+					y < buscaminasMain.columnas - 1 &&
+					(buscaminasMain.tableroVisible[x + 1][y + 1] !== '🏴' && buscaminasMain.tableroPulsadas[x + 1][y + 1] !== '🞫')
+				) {
+					buscaminasMain.guardarSeleccionContiguas.add(x + 1 + '-' + (y + 1));
+				}
+				if (
+					x > 0 &&
+					y < buscaminasMain.columnas - 1 &&
+					(buscaminasMain.tableroVisible[x - 1][y + 1] !== '🏴' && buscaminasMain.tableroPulsadas[x - 1][y + 1] !== '🞫')
+				) {
+					buscaminasMain.guardarSeleccionContiguas.add(x - 1 + '-' + (y + 1));
+				}
+			}
+		},
+
+		/**
+		 * Obtiene el numero de banderas de las casillas de alrededor de la casilla pasada por parámetro
+		 * @param x coordenada de la fila
+		 * @param y coordenada de la columna
+		 */
+		obtenerBanderasAlrededor(x, y) {
+			let totalBanderas = 0;
+			if (buscaminasMain.tableroPulsadas[x][y] === '🞫') {
+				if (x > 0 && y > 0 && buscaminasMain.tableroVisible[x - 1][y - 1] === '🏴') {
+					totalBanderas++;
+				}
+
+				if (y > 0 && buscaminasMain.tableroVisible[x][y - 1] === '🏴') {
+					totalBanderas++;
+				}
+
+				if (y > 0 && x < buscaminasMain.filas - 1 && buscaminasMain.tableroVisible[x + 1][y - 1] === '🏴') {
+					totalBanderas++;
+				}
+
+				if (x > 0 && buscaminasMain.tableroVisible[x - 1][y] === '🏴') {
+					totalBanderas++;
+				}
+
+				if (x < buscaminasMain.filas - 1 && buscaminasMain.tableroVisible[x + 1][y] === '🏴') {
+					totalBanderas++;
+				}
+
+				if (y < buscaminasMain.columnas - 1 && buscaminasMain.tableroVisible[x][y + 1] === '🏴') {
+					totalBanderas++;
+				}
+
+				if (
+					x < buscaminasMain.filas - 1 &&
+					y < buscaminasMain.columnas - 1 &&
+					buscaminasMain.tableroVisible[x + 1][y + 1] === '🏴'
+				) {
+					totalBanderas++;
+				}
+
+				if (x > 0 && buscaminasMain.columnas - 1 && buscaminasMain.tableroVisible[x - 1][y + 1] === '🏴') {
+					totalBanderas++;
+				}
+			}
+			return totalBanderas;
+		},
+
+		/**
+		 * Comprueba si se gana de manera convencional.
+		 */
+		comprobarGanador() {
+			if (buscaminasMain.obtenerPulsadas() === buscaminasMain.obtenerPendientesParaGanar()) {
+				buscaminasMain.flagGanar = true;
+				buscaminasMain.eliminarBanderas();
+				throw new Error(msgGanar);
+			}
+		},
+
+		/**
+		 * Devuelve el número de casillas pulsadas en el tablero.
+		 */
+		obtenerPulsadas() {
+			let contador = 0;
+			for (let i = 0; i < buscaminasMain.filas; i++) {
+				for (let j = 0; j < buscaminasMain.columnas; j++) {
+					if (buscaminasMain.tableroPulsadas[i][j] === '🞫') {
+						contador++;
+					}
+				}
+			}
+			return contador;
+		},
+
+		/**
+		 * Devuelve el número de casillas que deben quedar pendientes para ganar del tablero.
+		 */
+		obtenerPendientesParaGanar() {
+			let contador = 0;
+			for (let i = 0; i < buscaminasMain.filas; i++) {
+				for (let j = 0; j < buscaminasMain.columnas; j++) {
+					if (buscaminasMain.tableroLogica[i][j] !== '💣') {
+						contador++;
+					}
+				}
+			}
+			return contador;
+		},
+
+		/**
+		 * Devuelve el número de banderas del tablero.
+		 */
+		obtenerBanderasDelTablero() {
+			let banderas = 0;
+			for (let i = 0; i < buscaminasMain.filas; i++) {
+				for (let j = 0; j < buscaminasMain.columnas; j++) {
+					if (buscaminasMain.tableroVisible[i][j] === '🏴') {
+						banderas++;
+					}
+				}
+			}
+			return banderas;
+		},
+		eliminarBanderas() {
+			for (let i = 0; i < buscaminasMain.filas; i++) {
+				for (let j = 0; j < buscaminasMain.columnas; j++) {
+					if (buscaminasMain.tableroVisible[i][j] === '🏴') {
+						buscaminasMain.guardarCoordenadasBanderas.add(i + '-' + j);
+					}
+				}
+			}
+		},
+
+		/**
+		 * Comprueba si se ha ganado mediante el uso de banderas.
+		 */
+		comprobarGanadorConBanderas() {
+			let casillasNoPulsadas = 0;
+			let casillasYaPulsadas = 0;
+			let casillasParaGanar = 0;
+			for (let i = 0; i < buscaminasMain.filas; i++) {
+				for (let j = 0; j < buscaminasMain.columnas; j++) {
+					if (buscaminasMain.tableroPulsadas[i][j] === '🞫') {
+						casillasYaPulsadas++;
+					}
+					if (buscaminasMain.tableroPulsadas[i][j] !== '🞫') {
+						casillasNoPulsadas++;
+						if (
+							casillasNoPulsadas === buscaminasMain.minas &&
+							(buscaminasMain.tableroLogica[i][j] === '💣' && buscaminasMain.tableroVisible[i][j] === '🏴')
+						) {
+							casillasParaGanar++;
+						}
+					}
+				}
+			}
+			if (casillasYaPulsadas > 1 && casillasParaGanar === buscaminasMain.minas) {
+				buscaminasMain.flagGanar = true;
+				buscaminasMain.eliminarBanderas();
+				//throw new Error('Has ganado la partida');
+			}
 		}
-	}
-};
+	};
+
+	buscaminas = (function () {
+		return buscaminasMain;
+	})();
+
+	buscaminasMainMsg = (function () {
+		return {
+			"msgGanar": msgGanar,
+			"msgPerder": msgPerder,
+			"msgCoordenadaNoValida": msgCoordenadaNoValida
+		}
+	})();
+}
