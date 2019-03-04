@@ -102,19 +102,8 @@
 					buscaminasGUI.updateGUI();
 				}
 				buscaminasGUI.updateFlags();
-			} catch (e) {
-				buscaminasGUI.uncoverMines();
-				if (e.message === buscaminasMainMsg.msgGanar) {
-					buscaminasGUI.checkRecord();
-					buscaminasGUI.levelStyles('uncover-tile', element);
-					setTimeout(function () {
-						buscaminasGUI.swalPlayAgain(e.message, 'success');
-					}, 3000);
-				} else {
-					buscaminasGUI.stopMusic();
-					buscaminasGUI.playAudio('explosion.mp3');
-					buscaminasGUI.openMinesByLevelAnimationTime(e.message);
-				}
+			} catch (msg) {
+				buscaminasGUI.controlarException(msg);
 			}
 		},
 
@@ -124,31 +113,20 @@
 		 */
 		marcarGUI(element) {
 			let coordenada = buscaminasGUI.getCoordinates(element);
-			try {
-				buscaminas.marcar(coordenada.fila, coordenada.columna);
-				if (buscaminas.juegoNoFinalizado()) {
-					if (buscaminas.tableroVisible[coordenada.fila][coordenada.columna] === '🏴') {
-						buscaminasGUI.playAudio('flag.mp3');
-						buscaminasGUI.levelStyles('cover-flag', element);
-					} else if (buscaminas.tableroPulsadas[coordenada.fila][coordenada.columna] !== '🞫') {
-						if (buscaminas.banderas >= 1) {
-							buscaminasGUI.playAudio('unflag.mp3');
-						}
-						buscaminasGUI.levelStyles('cover-tile', element);
-					}
-					buscaminasGUI.updateFlags();
-				}
-			} catch (e) {
-				if (e.message === buscaminasMainMsg.msgGanar) {
-					buscaminasGUI.checkRecord();
-					buscaminasGUI.levelStyles('uncover-tile', element);
-					setTimeout(function () {
-						buscaminasGUI.swalPlayAgain(e.message, 'success');
-					}, 3000);
-				} else {
-					buscaminasGUI.openMinesByLevelAnimationTime(e.message);
-				}
+			buscaminas.marcar(coordenada.fila, coordenada.columna);
+			if (!buscaminas.juegoNoFinalizado()) {
+				return;
 			}
+			if (buscaminas.tableroVisible[coordenada.fila][coordenada.columna] === '🏴') {
+				buscaminasGUI.playAudio('flag.mp3');
+				buscaminasGUI.levelStyles('cover-flag', element);
+			} else if (buscaminas.tableroPulsadas[coordenada.fila][coordenada.columna] !== '🞫') {
+				if (buscaminas.banderas >= 1) {
+					buscaminasGUI.playAudio('unflag.mp3');
+				}
+				buscaminasGUI.levelStyles('cover-tile', element);
+			}
+			buscaminasGUI.updateFlags();
 		},
 
 		/**
@@ -159,28 +137,18 @@
 			let coordenada = buscaminasGUI.getCoordinates(element);
 			try {
 				buscaminas.despejar(coordenada.fila, coordenada.columna);
-				if (buscaminas.juegoNoFinalizado()) {
-					buscaminasGUI.updateGUI();
-					if (buscaminas.guardarSeleccionContiguas.size > 0) {
-						for (let tile of buscaminas.guardarSeleccionContiguas) {
-							$('#' + tile).removeClass('fadeInLeftBig');
-							$('#' + tile).effect('highlight', 'fast');
-						}
+				if (!buscaminas.juegoNoFinalizado()) {
+					return;
+				}
+				buscaminasGUI.updateGUI();
+				if (buscaminas.guardarSeleccionContiguas.size > 0) {
+					for (let tile of buscaminas.guardarSeleccionContiguas) {
+						$('#' + tile).removeClass('fadeInLeftBig');
+						$('#' + tile).effect('highlight', 'fast');
 					}
 				}
-			} catch (e) {
-				buscaminasGUI.uncoverMines();
-				if (e.message === buscaminasMainMsg.msgGanar) {
-					buscaminasGUI.checkRecord();
-					buscaminasGUI.levelStyles('uncover-tile', element);
-					setTimeout(function () {
-						buscaminasGUI.swalPlayAgain(e.message, 'success');
-					}, 3000);
-				} else {
-					buscaminasGUI.stopMusic();
-					buscaminasGUI.playAudio('explosion.mp3');
-					buscaminasGUI.openMinesByLevelAnimationTime(e.message);
-				}
+			} catch (msg) {
+				buscaminasGUI.controlarException(msg);
 			}
 		},
 
@@ -696,6 +664,23 @@
 			instructionsWindow.document.open();
 			instructionsWindow.document.write(html);
 			instructionsWindow.document.close();
+		},
+
+		/**
+		 * Controla el manejo de mensajes y otras funcionalidades al entrar en una exception al ganar o perder.
+		 */
+		controlarException(msg) {
+			buscaminasGUI.uncoverMines();
+			if (msg.message === buscaminasMainMsg.msgGanar) {
+				buscaminasGUI.checkRecord();
+				setTimeout(function () {
+					buscaminasGUI.swalPlayAgain(msg.message, 'success');
+				}, 3000);
+			} else {
+				buscaminasGUI.stopMusic();
+				buscaminasGUI.playAudio('explosion.mp3');
+				buscaminasGUI.openMinesByLevelAnimationTime(msg.message);
+			}
 		}
 	};
 
