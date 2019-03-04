@@ -3,12 +3,15 @@
  * @author Guillermo Boquizo Sánchez.
  */
 {
+	/**
+	 * Constantes para los mensajes de las exception.
+	 */
 	const msgGanar = "¡¡¡ Enhorabuena, has ganado !!!";
 	const msgPerder = "Pulsaste una mina, has perdido";
 	const msgCoordenadaNoValida = "Coordenadas inválidas.";
 
 	/**
-	 * Objeto buscaminasMain con la funcionalidad por consola.
+	 * Objeto buscaminasMain.
 	 */
 	let buscaminasMain = {
 		tableroLogica: [],
@@ -123,7 +126,6 @@
 		 * Genera y coloca las minas.
 		 */
 		generarMinas() {
-
 			for (let i = 0; i < buscaminasMain.minas; i++) {
 				let fila;
 				let columna;
@@ -555,6 +557,10 @@
 			}
 			return banderas;
 		},
+
+		/**
+		 * Guarda las banderas en un set para eliminarlas desde el contador de banderas.
+		 */
 		eliminarBanderas() {
 			for (let i = 0; i < buscaminasMain.filas; i++) {
 				for (let j = 0; j < buscaminasMain.columnas; j++) {
@@ -594,15 +600,25 @@
 				//throw new Error('Has ganado la partida');
 			}
 		},
+
+		/**
+		 * Comprueba que el juego no haya finalizado.
+		 */
 		juegoNoFinalizado() {
 			return !buscaminasMain.flagGanar && !buscaminasMain.flagPerder;
 		}
 	};
 
+	/**
+	 * Closure del objeto buscaminas.
+	 */
 	buscaminas = (function () {
 		return buscaminasMain;
 	})();
 
+	/**
+	 * Closure de las constantes para los mensajes.
+	 */
 	buscaminasMainMsg = (function () {
 		return {
 			"msgGanar": msgGanar,
