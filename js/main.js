@@ -194,26 +194,29 @@
 
 		/**
 		 * Pica una casilla.
-		 * @param  i coordenada para la fila.
-		 * @param  j coordenada para la columna.
+		 * @param  x coordenada para la fila.
+		 * @param  y coordenada para la columna.
 		 */
-		picar(i, j) {
+		picar(x, y) {
+			if (x > buscaminasMain.filas || y > buscaminasMain.columnas) {
+				throw new Error(msgCoordenadaNoValida);
+			}
 			if (
 				buscaminasMain.flagPerder ||
 				buscaminasMain.flagGanar ||
-				buscaminasMain.tableroPulsadas[i][j] === '🞫' ||
-				buscaminasMain.tableroVisible[i][j] === '🏴'
+				buscaminasMain.tableroPulsadas[x][y] === '🞫' ||
+				buscaminasMain.tableroVisible[x][y] === '🏴'
 			) {
 				return;
 			}
 
-			if (buscaminasMain.tableroLogica[i][j] === '💣') {
+			if (buscaminasMain.tableroLogica[x][y] === '💣') {
 				buscaminasMain.flagPerder = true;
 				throw new Error(msgPerder);
 			}
 
-			buscaminasMain.abrirCeros(i, j);
-			buscaminasMain.cargarPulsacion(i, j);
+			buscaminasMain.abrirCeros(x, y);
+			buscaminasMain.cargarPulsacion(x, y);
 			buscaminasMain.actualizaCambios();
 			// console.clear();
 			// console.log('Tablero de lógica:\n');
@@ -287,6 +290,9 @@
 		 * @param y coordenada para la columna.
 		 */
 		marcar(x, y) {
+			if (x > buscaminasMain.filas || y > buscaminasMain.columnas) {
+				throw new Error(msgCoordenadaNoValida);
+			}
 			if (
 				buscaminasMain.tableroPulsadas[x][y] !== '🞫' &&
 				buscaminasMain.tableroVisible[x][y] !== '🏴' &&

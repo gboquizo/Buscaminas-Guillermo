@@ -104,7 +104,7 @@
 				buscaminasGUI.updateFlags();
 			} catch (e) {
 				buscaminasGUI.uncoverMines();
-				if (e.message === '¡¡¡ Enhorabuena, has ganado !!!') {
+				if (e.message === buscaminasMainMsg.msgGanar) {
 					buscaminasGUI.checkRecord();
 					buscaminasGUI.levelStyles('uncover-tile', element);
 					setTimeout(function () {
@@ -139,7 +139,7 @@
 					buscaminasGUI.updateFlags();
 				}
 			} catch (e) {
-				if (e.message === "'¡¡¡ Enhorabuena, has ganado !!!'") {
+				if (e.message === buscaminasMainMsg.msgGanar) {
 					buscaminasGUI.checkRecord();
 					buscaminasGUI.levelStyles('uncover-tile', element);
 					setTimeout(function () {
@@ -170,7 +170,7 @@
 				}
 			} catch (e) {
 				buscaminasGUI.uncoverMines();
-				if (e.message === '¡¡¡ Enhorabuena, has ganado !!!') {
+				if (e.message === buscaminasMainMsg.msgGanar) {
 					buscaminasGUI.checkRecord();
 					buscaminasGUI.levelStyles('uncover-tile', element);
 					setTimeout(function () {
